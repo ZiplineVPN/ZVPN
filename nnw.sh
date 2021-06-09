@@ -61,7 +61,7 @@ else
     if [[ $? -eq 1 ]]; then
         echo "No valid script called"
     else
-        echo "Valid script: ${@:relativeCmd}"
+        echo "Valid script: ${@:-relativeCmd}"
         if [ -n "$relativeCmd" ]; then
             echo "Running $relativeCmd"
             chmod +x "$relativeCmd"
