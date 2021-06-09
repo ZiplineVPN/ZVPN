@@ -21,7 +21,7 @@ installWrapper()
     sudo chown $USER:$USER "$scriptDir"
     git clone "$domain/$repo" "$scriptDir"
     sudo rm "$binDir/$installedName"
-    sudo ln -s "$scriptDir/$wrapperName" "$binDir/$installedName"
+    sudo ln -s "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
     sudo chmod +x "$scriptDir/$wrapperName"
     echo "$displayName installed as '$installedName'"
     echo "      Repo link?          $domain/$repo"
