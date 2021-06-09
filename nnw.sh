@@ -51,24 +51,27 @@ if [ ! "$dir" == "$binDir" ]; then
     installWrapper
     exit
 else
-    sudo chown $USER:$USER "$scriptDir"
+#     sudo chown $USER:$USER "$scriptDir"
     cd "$scriptDir"
     git fetch --all
     git reset --hard origin/master
-    sudo chmod +x "$scriptDir/$wrapperName"
-    sudo ln -s "$scriptDir/$wrapperName" "$binDir/$installedName"
+#     sudo chmod +x "$scriptDir/$wrapperName"
+#     sudo ln -s "$scriptDir/$wrapperName" "$binDir/$installedName"
     relativeCmd=$(isolateScript "$@")
     if [[ $? -eq 1 ]]; then
         echo "No valid script called"
     else
-        echo "Valid script: ${@:-relativeCmd}"
-        if [ -n "$relativeCmd" ]; then
-            echo "Running $relativeCmd"
-            chmod +x "$relativeCmd"
-            "$relativeCmd"
-            #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$relativeCmd.sh"
-            #"$execDir/nnw-script.sh"
-            #rm "$execDir/nnw-script.sh"
-        fi
+        script=${@:1:cmdEndIndex-1}
+        script="${script// //}.sh"
+        echo "Running $script"
+        chmod +x "$script"
+        args=""
+        for a in "${@:cmdEndIndex}"; do
+            args="$args \"$a\""
+        done
+        "$script" $args
+        #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
+        #"$execDir/nnw-script.sh"
+        #rm "$execDir/nnw-script.sh"
     fi
 fi
