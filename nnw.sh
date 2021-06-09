@@ -30,6 +30,23 @@ installWrapper()
     echo "Ready to rollout!"
 }
 
+isolateScript()
+{
+
+    pathSoFar="."
+    pathAt=1
+    for w in "$@"; do
+        let pathAt++
+        pathSoFar="$pathSoFar/$w"
+        if [  -f "$pathSoFar.sh" ]; then
+            echo "$pathSoFar.sh ${@:$pathAt}"
+            return 0
+        fi
+    done
+    return 1
+}
+# isolateScript "$@"
+
 if [ ! "$dir" == "$binDir" ]; then
     installWrapper
     exit
@@ -40,14 +57,16 @@ else
     git reset --hard origin/master
     sudo chmod +x "$scriptDir/$wrapperName"
     sudo ln -s "$scriptDir/$wrapperName" "$binDir/$installedName"
-    old="$IFS"
-    IFS='/'
-    relativeCmd="$*"
-    IFS=$old
+    relativeCmd=$(isolateScript "$@")
+    if [[ $? -eq 1 ]]; then
+        echo "No valid script called"
+    else
+        echo "Valid script: $relativeCmd"
+    fi
     if [ -n "$relativeCmd" ]; then
         echo "Running $relativeCmd"
-        chmod +x "$relativeCmd.sh"
-        "./$relativeCmd.sh"
+        chmod +x "$relativeCmd"
+        "$relativeCmd"
         #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$relativeCmd.sh"
         #"$execDir/nnw-script.sh"
         #rm "$execDir/nnw-script.sh"
