@@ -39,7 +39,7 @@ isolateScript()
         let pathAt++
         pathSoFar="$pathSoFar/$w"
         if [  -f "$pathSoFar.sh" ]; then
-            echo "$pathSoFar.sh ${@:$pathAt}"
+            echo "$pathAt"
             return 0
         fi
     done
@@ -62,13 +62,13 @@ else
         echo "No valid script called"
     else
         echo "Valid script: $relativeCmd"
-    fi
-    if [ -n "$relativeCmd" ]; then
-        echo "Running $relativeCmd"
-        chmod +x "$relativeCmd"
-        "$relativeCmd"
-        #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$relativeCmd.sh"
-        #"$execDir/nnw-script.sh"
-        #rm "$execDir/nnw-script.sh"
+        if [ -n "$relativeCmd" ]; then
+            echo "Running $relativeCmd"
+            chmod +x "$relativeCmd"
+            "$relativeCmd"
+            #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$relativeCmd.sh"
+            #"$execDir/nnw-script.sh"
+            #rm "$execDir/nnw-script.sh"
+        fi
     fi
 fi
