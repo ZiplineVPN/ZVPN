@@ -55,9 +55,9 @@ else
     cd "$scriptDir"
     git fetch --all
     git reset --hard origin/master
-#     sudo chmod +x "$scriptDir/$wrapperName"
-#     sudo ln -s "$scriptDir/$wrapperName" "$binDir/$installedName"
-    relativeCmd=$(isolateScript "$@")
+    sudo chmod +x "$scriptDir/$wrapperName"
+    sudo ln -s "$scriptDir/$wrapperName" "$binDir/$installedName"
+    cmdEndIndex=$(isolateScript "$@")
     if [[ $? -eq 1 ]]; then
         echo "No valid script called"
     else
