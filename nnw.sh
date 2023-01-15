@@ -1,10 +1,10 @@
 #!/bin/bash
 gitUsername=""
 gitToken=""
-domain="https://git.nicknet.works"
+domain="https://github.com"
 displayName="NNW"
 slugName=$( echo "$displayName" | awk '{print tolower($0)}')
-repo="Bash/$slugName"
+repo="NickNetworks/$slugName"
 wrapperName="$slugName.sh"
 installedName="$slugName"
 binDir="/usr/bin"
