@@ -1,7 +1,7 @@
 #!/bin/bash
 gitUsername=""
 gitToken=""
-domain="https://git.nicknet.works"
+domain="https://git.nicknet.works/"
 displayName="NNW"
 slugName=$( echo "$displayName" | awk '{print tolower($0)}')
 repo="NickNetworks/$slugName"
@@ -16,13 +16,13 @@ execDir="$(pwd)"
 
 installWrapper()
 {
-    rm -rf "$scriptDir"
-    mkdir -p "$scriptDir"
-    chown $USER:$USER "$scriptDir"
+    sudo rm -rf "$scriptDir"
+    sudo mkdir -p "$scriptDir"
+    sudo chown $USER:$USER "$scriptDir"
     git clone "$domain/$repo" "$scriptDir"
-    rm "$binDir/$installedName"
-    ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
-    chmod +x "$scriptDir/$wrapperName"
+    sudo rm "$binDir/$installedName"
+    sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
+    sudo chmod +x "$scriptDir/$wrapperName"
     echo "$displayName installed as '$installedName'"
     echo "      Repo link?          $domain/$repo"
     echo "      This $displayName's name?    $wrapperName"
@@ -55,8 +55,8 @@ else
     cd "$scriptDir"
     git fetch --all
     git reset --hard origin/master
-    chmod +x "$scriptDir/$wrapperName"
-    ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
+    sudo chmod +x "$scriptDir/$wrapperName"
+    sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
     cmdEndIndex=$(isolateScript "$@")
     if [[ $? -eq 1 ]]; then
         echo "No valid script called"
