@@ -54,7 +54,7 @@ else
 #     sudo chown $USER:$USER "$scriptDir"
     cd "$scriptDir"
     git fetch --all
-    git reset --hard origin/master
+    git reset --hard origin/main
     sudo chmod +x "$scriptDir/$wrapperName"
     sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
     cmdEndIndex=$(isolateScript "$@")
