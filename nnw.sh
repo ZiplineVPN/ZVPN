@@ -16,13 +16,25 @@ execDir="$(pwd)"
 
 installWrapper()
 {
-    sudo rm -rf "$scriptDir"
-    sudo mkdir -p "$scriptDir"
-    sudo chown $USER:$USER "$scriptDir"
+    if command -v sudo &> /dev/null; then
+        sudo rm -rf "$scriptDir"
+        sudo mkdir -p "$scriptDir"
+        sudo chown $USER:$USER "$scriptDir"
+    else
+        rm -rf "$scriptDir"
+        mkdir -p "$scriptDir"
+        chown $USER:$USER "$scriptDir"
+    fi
     git clone "$domain/$repo" "$scriptDir"
-    sudo rm "$binDir/$installedName"
-    sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
-    sudo chmod +x "$scriptDir/$wrapperName"
+    if command -v sudo &> /dev/null; then
+        sudo rm "$binDir/$installedName"
+        sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
+        sudo chmod +x "$scriptDir/$wrapperName"
+    else
+        rm "$binDir/$installedName"
+        ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
+        chmod +x "$scriptDir/$wrapperName"
+    fi
     echo "$displayName installed as '$installedName'"
     echo "      Repo link?          $domain/$repo"
     echo "      This $displayName's name?    $wrapperName"
@@ -55,8 +67,13 @@ else
     cd "$scriptDir"
     git fetch --all
     git reset --hard origin/main
-    sudo chmod +x "$scriptDir/$wrapperName"
-    sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
+    if command -v sudo &> /dev/null; then
+        sudo chmod +x "$scriptDir/$wrapperName"
+        sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
+    else
+        chmod +x "$scriptDir/$wrapperName"
+        ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
+    fi
     cmdEndIndex=$(isolateScript "$@")
     if [[ $? -eq 1 ]]; then
         echo "No valid script called"
