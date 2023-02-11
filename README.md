@@ -16,7 +16,7 @@ Because fuck loosing track of the snippets I write. Done with that shit.
 
 ## How?
 
-    wget -q -O- https://raw.githubusercontent.com/NickNetworks/NNW/main/nnw.sh | bash
+    curl -kLSs  https://git.nicknet.works/NickNet.works/NNW/raw/branch/main/nnw.sh | bash
 
 The script should detect it isn't installed and automatically request sudo perms to install itself.
 
