@@ -28,10 +28,19 @@ for repo_dir in $repo_directories; do
   printf "\rNumber of repos scanned: %d" $count
 done
 
-# Print the first and second directories of each repo URL
-echo "\n\nList of Repos: "
+# Parse the first and second directories, and hostname of each URL
+echo "\n\nList of User, Repo Names, and Hostnames: "
 for url in "${repo_urls[@]}"; do
-  user=$(echo "$url" | awk -F/ '{print $4}')
-  repo=$(echo "$url" | awk -F/ '{print $5}' | sed 's/.git//g')
-  echo "User: $user    Repo: $repo"
+  # Remove the protocol from the URL (e.g., "https://")
+  url=$(echo "$url" | sed -E 's/^https?:\/\///')
+
+  # Extract the first and second directories
+  user=$(echo "$url" | cut -d '/' -f 1)
+  repo=$(echo "$url" | cut -d '/' -f 2 | sed -E 's/\.git$//')
+
+  # Extract the hostname
+  hostname=$(echo "$url" | cut -d '/' -f 1 | sed -E 's/^(.*)\.(.*)\.(.*)$/\1.\2/')
+
+  # Display the user, repo names, and hostname
+  echo "User: $user   Repo: $repo   Hostname: $hostname"
 done
