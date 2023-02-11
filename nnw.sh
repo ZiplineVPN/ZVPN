@@ -1,7 +1,7 @@
 #!/bin/bash
 gitUsername=""
 gitToken=""
-domain="https://git.nicknet.works/"
+domain="https://git.nicknet.works"
 displayName="NNW"
 slugName=$( echo "$displayName" | awk '{print tolower($0)}')
 repo="NickNetworks/$slugName"
