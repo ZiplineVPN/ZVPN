@@ -10,7 +10,7 @@ declare -A pkg_managers=(
   ["snap"]="sudo snap refresh"
   ["gem"]="gem update && gem cleanup"
   ["entropy-client"]="entropy-client --update-all --quiet && entropy-client --autoremove --quiet && entropy-client --autoclean --quiet"
-  ["flatpak"]=`flatpak update --assumeyes && flatpak uninstall --assumeyes --non-interactive $(flatpak list --unused | awk '{print $2}') && flatpak clean --assumeyes`
+  ["flatpak"]="flatpak update --assumeyes && flatpak uninstall --unused --assumeyes && flatpak cleanup --assumeyes"
   ["guix"]="guix pull --quiet && guix package --upgrade-all --quiet && guix package --delete-generations=old"
   ["brew"]="brew update --quiet && brew upgrade --quiet && brew cleanup --quiet"
   ["ipkg"]="ipkg update --quiet && ipkg upgrade --quiet && ipkg autoremove --quiet && ipkg clean --quiet"
