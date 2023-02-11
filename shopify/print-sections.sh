@@ -7,8 +7,8 @@ parse_section() {
   # extract the section name
   section_name=$(grep -oP '"name":\s*"\w+"' $section_file | awk -F'"' '{print $4}')
   
-  # print the section name
-  echo "$section_name"
+  # print the filename and the section name
+  echo "$section_file: $section_name"
 }
 
 # iterate over all the files in the sections subfolder
