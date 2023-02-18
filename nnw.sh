@@ -26,7 +26,7 @@ installWrapper()
         mkdir -p "$scriptDir"
         chown $USER:$USER "$scriptDir"
     fi
-    echo "Remote repository matches domain and repository name. Checking for updates..."
+    echo "Checking for updates..."
     if git -C "$scriptDir" remote update; then
         if ! git -C "$scriptDir" diff --quiet origin/master; then
             echo "Remote repository has changes. Updating local repository..."
