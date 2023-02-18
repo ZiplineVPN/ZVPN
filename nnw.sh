@@ -7,7 +7,7 @@ slugName=$( echo "$displayName" | awk '{print tolower($0)}')
 repo="NickNet.works/$slugName"
 wrapperName="$slugName.sh"
 installedName="$slugName"
-binDir="/usr/local/bin"
+binDir="/usr/bin"
 scriptDir="~/.$slugName"
 
 ##End Config Section. Don't edit below, unless you intend to change functionality.

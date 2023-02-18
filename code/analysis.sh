@@ -29,7 +29,9 @@ The script is well organized, with each piece of information being retrieved by 
  The functions are called in a specific order by the main function, and the final output is displayed using the display_results function.
 comment
 
+# This function retrieves the current SHA (hash) of the repository.
 get_repo_sha() {
+  # The current SHA is stored in the variable "current_sha"
   current_sha=$(git rev-parse HEAD)
 }
 
