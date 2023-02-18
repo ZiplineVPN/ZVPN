@@ -2,6 +2,7 @@
 gitUsername=""
 gitToken=""
 domain="https://git.nicknet.works"
+allowDomainChange=false
 displayName="NNW"
 slugName=$( echo "$displayName" | awk '{print tolower($0)}')
 repo="NickNet.works/$slugName"
@@ -25,21 +26,16 @@ installWrapper()
         mkdir -p "$scriptDir"
         chown $USER:$USER "$scriptDir"
     fi
-    if git remote show origin | grep "Fetch URL" | grep -q "$domain/$repo"; then
-        echo "Remote repository matches domain and repository name. Checking for updates..."
-        if git -C "$scriptDir" remote update; then
-            if ! git -C "$scriptDir" diff --quiet origin/master; then
-                echo "Remote repository has changes. Updating local repository..."
-                git -C "$scriptDir" pull
-            else
-                echo "Local repository is up-to-date with remote repository."
-            fi
+    echo "Remote repository matches domain and repository name. Checking for updates..."
+    if git -C "$scriptDir" remote update; then
+        if ! git -C "$scriptDir" diff --quiet origin/master; then
+            echo "Remote repository has changes. Updating local repository..."
+            git -C "$scriptDir" pull
         else
-            echo "Error updating remote repository. Cloning new repository..."
-            git clone "$domain/$repo" "$scriptDir"
+            echo "Local repository is up-to-date with remote repository."
         fi
     else
-        echo "Remote repository does not match domain and repository name. Cloning new repository..."
+        echo "Error updating remote repository. Cloning new repository..."
         git clone "$domain/$repo" "$scriptDir"
     fi
     if command -v sudo &> /dev/null; then
