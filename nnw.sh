@@ -25,7 +25,23 @@ installWrapper()
         mkdir -p "$scriptDir"
         chown $USER:$USER "$scriptDir"
     fi
-    git clone "$domain/$repo" "$scriptDir"
+    if git remote show origin | grep "Fetch URL" | grep -q "$domain/$repo"; then
+        echo "Remote repository matches domain and repository name. Checking for updates..."
+        if git -C "$scriptDir" remote update; then
+            if ! git -C "$scriptDir" diff --quiet origin/master; then
+                echo "Remote repository has changes. Updating local repository..."
+                git -C "$scriptDir" pull
+            else
+                echo "Local repository is up-to-date with remote repository."
+            fi
+        else
+            echo "Error updating remote repository. Cloning new repository..."
+            git clone "$domain/$repo" "$scriptDir"
+        fi
+    else
+        echo "Remote repository does not match domain and repository name. Cloning new repository..."
+        git clone "$domain/$repo" "$scriptDir"
+    fi
     if command -v sudo &> /dev/null; then
         sudo rm "$binDir/$installedName"
         sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
@@ -44,7 +60,7 @@ installWrapper()
 
 isolateScript()
 {
-
+    
     pathSoFar="."
     pathAt=1
     for w in "$@"; do
@@ -63,7 +79,7 @@ if [ ! "$dir" == "$binDir" ]; then
     installWrapper
     exit
 else
-#     sudo chown $USER:$USER "$scriptDir"
+    #     sudo chown $USER:$USER "$scriptDir"
     cd "$scriptDir"
     git fetch --all
     git reset --hard origin/main
@@ -89,7 +105,7 @@ else
                     echo " - $(basename "$file")"
                 fi
             done
-        elif [ -f "$script" ]; then
+            elif [ -f "$script" ]; then
             echo "Running $script"
             chmod +x "$script"
             args=""
