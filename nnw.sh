@@ -2,7 +2,6 @@
 gitUsername=""
 gitToken=""
 domain="https://git.nicknet.works"
-allowDomainChange=false
 displayName="NNW"
 slugName=$( echo "$displayName" | awk '{print tolower($0)}')
 repo="NickNet.works/$slugName"
@@ -26,18 +25,6 @@ installWrapper()
         mkdir -p "$scriptDir"
         chown $USER:$USER "$scriptDir"
     fi
-    echo "Checking for updates..."
-    if git -C "$scriptDir" remote update; then
-        if ! git -C "$scriptDir" diff --quiet origin/master; then
-            echo "Remote repository has changes. Updating local repository..."
-            git -C "$scriptDir" pull
-        else
-            echo "Local repository is up-to-date with remote repository."
-        fi
-    else
-        echo "Error updating remote repository. Cloning new repository..."
-        git clone "$domain/$repo" "$scriptDir"
-    fi
     if command -v sudo &> /dev/null; then
         sudo rm "$binDir/$installedName"
         sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
@@ -52,6 +39,30 @@ installWrapper()
     echo "      This $displayName's name?    $wrapperName"
     echo "      Where?              $binDir/$installedName"
     echo "Ready to rollout!"
+}
+
+updateCheck()
+{
+    echo "Checking for updates..."
+    if git -C "$scriptDir" remote update; then
+        if ! git -C "$scriptDir" diff --quiet origin/master; then
+            echo "Remote repository has changes. Current SHA: $(git -C "$scriptDir" rev-parse HEAD) Updating local repository..."
+            git -C "$scriptDir" pull
+            if command -v sudo &> /dev/null; then
+                sudo chmod +x "$scriptDir/$wrapperName"
+                sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
+            else
+                chmod +x "$scriptDir/$wrapperName"
+                ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
+            fi
+            echo "Local repository has been updated from remote repository. Current SHA: $(git -C "$scriptDir" rev-parse HEAD)"
+        else
+            echo "Local repository is up-to-date with remote repository."
+        fi
+    else
+        echo "Error updating remote repository. Cloning new repository..."
+        git clone "$domain/$repo" "$scriptDir"
+    fi
 }
 
 isolateScript()
@@ -77,15 +88,7 @@ if [ ! "$dir" == "$binDir" ]; then
 else
     #     sudo chown $USER:$USER "$scriptDir"
     cd "$scriptDir"
-    git fetch --all
-    git reset --hard origin/main
-    if command -v sudo &> /dev/null; then
-        sudo chmod +x "$scriptDir/$wrapperName"
-        sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
-    else
-        chmod +x "$scriptDir/$wrapperName"
-        ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
-    fi
+    updateCheck
     cmdEndIndex=$(isolateScript "$@")
     if [[ $? -eq 1 ]]; then
         echo "No valid script called"
