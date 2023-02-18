@@ -25,6 +25,7 @@ installWrapper()
         mkdir -p "$scriptDir"
         chown $USER:$USER "$scriptDir"
     fi
+    updateCheck
     if command -v sudo &> /dev/null; then
         sudo rm "$binDir/$installedName"
         sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
