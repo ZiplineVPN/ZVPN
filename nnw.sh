@@ -8,7 +8,7 @@ repo="NickNet.works/$slugName"
 wrapperName="$slugName.sh"
 installedName="$slugName"
 binDir="/usr/bin"
-scriptDir="~/.$slugName"
+scriptDir="/etc/$slugName"
 
 ##End Config Section. Don't edit below, unless you intend to change functionality.
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
