@@ -9,7 +9,7 @@ done
 
 # Delete all remote branches
 for branch in $(git branch -r | grep -v HEAD | awk -F/ '{print $2}'); do
-  if [[ $branch != "main" ]]; then
+  if [[ $branch != "wip" ]]; then
     echo "git push origin --delete $branch"
   fi
 done
