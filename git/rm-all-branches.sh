@@ -3,7 +3,7 @@
 # Delete all local branches
 for branch in $(git branch | cut -c 3-); do
   if [[ $branch != "master" ]]; then
-    git branch -D $branch
+    echo "git branch -D $branch"
   fi
 done
 
