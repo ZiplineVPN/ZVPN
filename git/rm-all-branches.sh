@@ -1,13 +1,6 @@
 #!/bin/bash
 
-# Delete all local branches
-for branch in $(git branch | cut -c 3-); do
-    echo "git branch -D $branch"
-done
+git branch | grep -v "main" | xargs echo #git branch -D
 
 # Delete all remote branches
-for branch in $(git branch -r | grep -v HEAD | awk -F/ '{print $2}'); do
-    if [[ $branch != "main" ]]; then
-        echo "git push origin --delete $branch"
-    fi
-done
+git branch -r | grep -v "main" | sed 's/origin\///' | xargs echo
