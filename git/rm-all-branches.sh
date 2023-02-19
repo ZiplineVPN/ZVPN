@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Delete all local branches
-for branch in $(git branch | cut -c 3-); do
+for branch in $(git branch); do
     echo "git branch -D $branch"
 done
 
