@@ -1,3 +1,8 @@
+#!/bin/bash
+
+# Set default directory to current working directory
+dir=${1:-$(pwd)}
+
 # Set Gitea API URL and access token
 GITEA_API_URL="https://git.nicknet.works/api/v1"
 # Prompt for Gitea API key
@@ -10,8 +15,8 @@ if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
         real_run=0
     fi
 
-    # Find all git repositories in the current working directory and its subdirectories
-    for repo in $(find . -name ".git" -type d); do
+    # Find all git repositories in the specified directory and its subdirectories
+    for repo in $(find $dir -name ".git" -type d); do
         # Get the path to the parent directory of the git repository
         repo_path="$(dirname "$repo")"
 
@@ -50,6 +55,6 @@ if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
     done
 else
     echo "Error: Invalid argument was provided."
-    echo "Usage: $0 [--real-run]"
+    echo "Usage: $0 [--real-run] [dir]"
     exit 1
 fi
