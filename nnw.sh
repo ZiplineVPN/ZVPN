@@ -88,13 +88,15 @@ if [ ! "$dir" == "$binDir" ]; then
     exit
 else
     #     sudo chown $USER:$USER "$scriptDir"
+    scriptDir=$(dirname "$0")
+    cd "$scriptDir"
     updateCheck
     cmdEndIndex=$(isolateScript "$@")
-    script=${@:1:cmdEndIndex-1}
+    script="${scriptDir}/${@:1:cmdEndIndex-1}"
     script="${script// //}.sh"
     if [ -d "$script" ]; then
         echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
-        for file in "$script"/*; do
+        for file in "${script}"/*; do
             if [[ -d "$file" ]]; then
                 echo " - $(basename "$file") (directory)"
             else
