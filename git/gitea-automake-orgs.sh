@@ -22,7 +22,7 @@ done
 
 shift $(($OPTIND - 1))
 
-if [[ $# -eq 1 ]]; then
+if [[ $# -eq 1 || $# -gt 1 ]]; then
   working_directory=$1
 elif [[ $# -gt 1 ]]; then
   print_usage
