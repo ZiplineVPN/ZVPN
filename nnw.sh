@@ -116,8 +116,6 @@ else
             #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
             #"$execDir/nnw-script.sh"
             #rm "$execDir/nnw-script.sh"
-        else
-            echo "Script '$script' does not exist."
         fi
     fi
 fi
