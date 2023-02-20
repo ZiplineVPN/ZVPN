@@ -1,8 +1,10 @@
 #!/bin/bash
 
 # Set Gitea API URL and access token
-GITEA_API_URL="https://your-gitea-url.com/api/v1"
-GITEA_ACCESS_TOKEN="your-gitea-access-token"
+GITEA_API_URL="https://git.nicknet.works/api/v1"
+# Prompt for Gitea API key
+read -p "Enter your Gitea API key: " GITEA_API_KEY
+
 
 # Check if --real-run was provided
 if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
