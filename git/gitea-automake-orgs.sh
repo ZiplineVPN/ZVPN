@@ -14,7 +14,7 @@ if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
     fi
     
     # Find all git repositories in the current working directory and its subdirectories
-    find . -name ".git" -type d  | while read $repo
+    find . -name ".git" -type d  | while read repo
     do
         # Get the path to the parent directory of the git repository
         repo_path="$(dirname "$repo")"
