@@ -93,7 +93,6 @@ else
     updateCheck
     cmdEndIndex=$(isolateScript "$@")
     script="${scriptDir}/${@:1:cmdEndIndex-1}"
-    script="${script// //}.sh"
     if [ -d "$script" ]; then
         echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
         for file in "${script}"/*; do
