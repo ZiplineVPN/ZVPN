@@ -47,7 +47,7 @@ if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
         else
             echo "Remote URL $remote_url for $repo_path is not a Gitea URL, skipping."
         fi
-        echo $BASH_REMATCH[1]
+        echo $BASH_REMATCH[2]
     done
 else
     echo "Error: Invalid argument was provided."
