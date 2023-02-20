@@ -74,7 +74,23 @@ isolateScript()
     for w in "$@"; do
         let pathAt++
         pathSoFar="$pathSoFar/$w"
-        if [ -f "$pathSoFar.sh" ] || [ -d "$pathSoFar" ]; then
+        if [ -f "$pathSoFar.sh" ]; then
+            echo "$pathAt"
+            return 0
+        fi
+    done
+    return 1
+}
+
+isolateDir()
+{
+    
+    pathSoFar="."
+    pathAt=1
+    for w in "$@"; do
+        let pathAt++
+        pathSoFar="$pathSoFar/$w"
+        if [ -d "$pathSoFar" ]; then
             echo "$pathAt"
             return 0
         fi
@@ -92,13 +108,9 @@ else
     updateCheck
     cmdEndIndex=$(isolateScript "$@")
     if [ $((cmdEndIndex-1)) -lt 0 ]; then
+        cmdEndIndex=$(isolateDir "$@")
         script=${@:1:cmdEndIndex-1}
         script="${script// //}.sh"
-    else
-        script=${@:1:cmdEndIndex-1}
-        script="${script// //}.sh"
-    fi
-    if [ -d "$script" ]; then
         echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
         for file in "$script"/*; do
             if [[ -d "$file" ]]; then
@@ -109,6 +121,7 @@ else
         done
     else
         echo "Error: not a valid script."
+        exit 1
     fi
     if [ -f "$script" ]; then
         echo "Running $script"
