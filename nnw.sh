@@ -74,7 +74,7 @@ isolateScript()
     for w in "$@"; do
         let pathAt++
         pathSoFar="$pathSoFar/$w"
-        if [  -f "$pathSoFar.sh" || -d "$pathSoFar" ]; then
+        if [[  -f "$pathSoFar.sh" || -d "$pathSoFar" ]]; then
             echo "$pathAt"
             return 0
         fi
