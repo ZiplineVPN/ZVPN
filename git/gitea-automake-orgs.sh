@@ -30,7 +30,7 @@ if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
             user_name=${BASH_REMATCH[4]}
 
             # Check if the organization already exists in Gitea
-            org_resp=$(curl --silent -H "Authorization: token $GITEA_ACCESS_TOKEN" -X GET "$GITEA_API_URL/orgs/$org_name")
+            org_resp=$(curl --silent -H "Authorization: token $GITEA_ACCESS_TOKEN" -X GET "$GITEA_API_URL/orgs/{$org_name}r")
             echo $org_resp
             if [ "$org_resp" = "Not Found" ]; then
                 # Create the organization in Gitea
