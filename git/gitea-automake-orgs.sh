@@ -25,7 +25,7 @@ esac
 done
 
 # Change to specified directory
-cd "$directory" || exit 1
+cd $directory || exit 1
 
 # Find all git repositories in the current working directory and its subdirectories
 for repo in $(find . -name ".git" -type d); do
