@@ -74,7 +74,7 @@ isolateScript()
     for w in "$@"; do
         let pathAt++
         pathSoFar="$pathSoFar/$w"
-        if [  -f "$pathSoFar.sh" ]; then
+        if [  -f "$pathSoFar.sh" || -d "$pathSoFar" ]; then
             echo "$pathAt"
             return 0
         fi
@@ -93,6 +93,8 @@ else
     cmdEndIndex=$(isolateScript "$@")
     if [ $((cmdEndIndex-1)) -lt 0 ]; then
         if [ -d "$script" ]; then
+            script=${@:1:cmdEndIndex}
+            script="${script// //}"
             echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
             for file in "$script"/*; do
                 if [[ -d "$file" ]]; then
