@@ -112,7 +112,7 @@ else
             for a in "${@:cmdEndIndex}"; do
                 args="$args \"$a\""
             done
-            "$script" $args
+            bash "$script" $args
             #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
             #"$execDir/nnw-script.sh"
             #rm "$execDir/nnw-script.sh"

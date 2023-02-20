@@ -10,42 +10,42 @@ directory="."
 
 while [[ $# -gt 0 ]]
 do
-key="$1"
-
-case $key in
-    --real-run)
-    real_run=1
-    shift
-    ;;
-    *)
-    directory="$1"
-    shift
-    ;;
-esac
+    key="$1"
+    
+    case $key in
+        --real-run)
+            real_run=1
+            shift
+        ;;
+        *)
+            directory="$1"
+            shift
+        ;;
+    esac
 done
 
 # Change to specified directory
-cd $directory || exit 1
+cd "$directory" || exit 1
 
 # Find all git repositories in the current working directory and its subdirectories
 for repo in $(find . -name ".git" -type d); do
     # Get the path to the parent directory of the git repository
     repo_path="$(dirname "$repo")"
-
+    
     # Get the remote URL
     remote_url=$(git --git-dir="$repo" --work-tree="$repo_path" remote get-url origin 2>/dev/null)
-
+    
     # Check if the remote URL command failed
     if [ $? -ne 0 ]; then
         echo "Error: No such remote 'origin' in $repo_path."
         continue
     fi
-
+    
     # Check if the remote URL is a Gitea URL
     if [[ $remote_url =~ ^(https?:\/\/)([^\/]+)\/([^\/]+)\/([^\/]+)\/?$ ]]; then
         org_name=${BASH_REMATCH[3]}
         user_name=${BASH_REMATCH[4]}
-
+        
         # Check if the organization already exists in Gitea
         org_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X GET "$GITEA_API_URL/orgs/$org_name")
         echo $org_repo
