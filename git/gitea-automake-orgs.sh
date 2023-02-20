@@ -24,6 +24,8 @@ if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
             continue
         fi
 
+        echo $repo
+
         # Check if the remote URL is a Gitea URL
         if [[ $remote_url =~ ^(https?:\/\/)([^\/]+)\/([^\/]+)\/([^\/]+)\/?$ ]]; then
             org_name=${BASH_REMATCH[3]}
