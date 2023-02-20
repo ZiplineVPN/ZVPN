@@ -31,7 +31,7 @@ if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
 
             # Check if the organization already exists in Gitea
             org_resp=$(curl --silent -H "Authorization: token $GITEA_ACCESS_TOKEN" -X GET "$GITEA_API_URL/orgs/$org_name")
-            echo $org_repo
+            echo $org_resp
             if [ "$org_resp" = "Not Found" ]; then
                 # Create the organization in Gitea
                 if [ $real_run -eq 1 ]; then
