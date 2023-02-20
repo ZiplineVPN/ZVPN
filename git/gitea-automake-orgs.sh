@@ -30,8 +30,6 @@ if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
         
         # Check if the remote URL is a Gitea URL
         if [[ $remote_url =~ ^(https?:\/\/)([^\/]+)\/([^\/]+)\/([^\/]+)\/$ ]]; then
-            org_name=${BASH_REMATCH[1]}
-            user_name=${BASH_REMATCH[2]}
             
             # Check if the organization already exists in Gitea
             org_resp=$(curl --silent -H "Authorization: token $GITEA_ACCESS_TOKEN" -X GET "$GITEA_API_URL/orgs/$org_name")
@@ -49,6 +47,7 @@ if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
         else
             echo "Remote URL $remote_url for $repo_path is not a Gitea URL, skipping."
         fi
+        echo $BASH_REMATCH[1]
     done
 else
     echo "Error: Invalid argument was provided."
