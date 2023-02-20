@@ -91,6 +91,7 @@ else
     cd "$scriptDir"
     updateCheck
     cmdEndIndex=$(isolateScript "$@")
+    echo $cmdEndIndex
     if [ $((cmdEndIndex-1)) -lt 0 ]; then
         if [ -d "$script" ]; then
             script=${@:1:cmdEndIndex}
