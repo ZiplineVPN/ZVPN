@@ -47,7 +47,7 @@ if [ $# -eq 0 ] || [ "$1" == "--real-run" ]; then
         echo "Organization $org_name already exists in Gitea, skipping creation."
       fi
     else
-      echo "Remote URL for $repo_path is not a Gitea URL, skipping."
+      echo "Remote URL $remote_url for $repo_path is not a Gitea URL, skipping."
     fi
   done
 else
