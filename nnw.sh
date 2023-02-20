@@ -109,19 +109,21 @@ else
     cmdEndIndex=$(isolateScript "$@")
     if [ $((cmdEndIndex-1)) -lt 0 ]; then
         cmdEndIndex=$(isolateDir "$@")
-        script=${@:1:cmdEndIndex-1}
-        script="${script// //}.sh"
-        echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
-        for file in "$script"/*; do
-            if [[ -d "$file" ]]; then
-                echo " - $(basename "$file") (directory)"
-            else
-                echo " - $(basename "$file")"
-            fi
-        done
-    else
-        echo "Error: not a valid script."
-        exit 1
+        if [ $((cmdEndIndex-1)) -lt 0 ]; then
+            script=${@:1:cmdEndIndex-1}
+            script="${script// //}"
+            echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
+            for file in "$script"/*; do
+                if [[ -d "$file" ]]; then
+                    echo " - $(basename "$file") (directory)"
+                else
+                    echo " - $(basename "$file")"
+                fi
+            done
+        else
+            echo "Error: not a valid script."
+            exit 1
+        fi
     fi
     if [ -f "$script" ]; then
         echo "Running $script"
