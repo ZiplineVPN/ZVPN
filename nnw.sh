@@ -91,29 +91,33 @@ else
     cd "$scriptDir"
     updateCheck
     cmdEndIndex=$(isolateScript "$@")
-    script=${@:1:cmdEndIndex-1}
-    script="${script// //}.sh"
-    if [ -d "$script" ]; then
-        echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
-        for file in "$script"/*; do
-            if [[ -d "$file" ]]; then
-                echo " - $(basename "$file") (directory)"
-            else
-                echo " - $(basename "$file")"
-            fi
-        done
-        elif [ -f "$script" ]; then
-        echo "Running $script"
-        chmod +x "$script"
-        args=""
-        for a in "${@:cmdEndIndex}"; do
-            args="$args \"$a\""
-        done
-        "$script" $args
-        #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
-        #"$execDir/nnw-script.sh"
-        #rm "$execDir/nnw-script.sh"
+    if [ $((cmdEndIndex-1)) -lt 0 ]; then
+        echo "Error: no valid script called"
     else
-        echo "Script '$script' does not exist."
+        script=${@:1:cmdEndIndex-1}
+        script="${script// //}.sh"
+        if [ -d "$script" ]; then
+            echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
+            for file in "$script"/*; do
+                if [[ -d "$file" ]]; then
+                    echo " - $(basename "$file") (directory)"
+                else
+                    echo " - $(basename "$file")"
+                fi
+            done
+            elif [ -f "$script" ]; then
+            echo "Running $script"
+            chmod +x "$script"
+            args=""
+            for a in "${@:cmdEndIndex}"; do
+                args="$args \"$a\""
+            done
+            "$script" $args
+            #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
+            #"$execDir/nnw-script.sh"
+            #rm "$execDir/nnw-script.sh"
+        else
+            echo "Script '$script' does not exist."
+        fi
     fi
 fi
