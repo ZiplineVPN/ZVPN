@@ -142,7 +142,7 @@ find . -name ".git" -type d | while IFS= read -r repo; do
             echo "Pushing repo $repo_name in $repo_path."
             had_echo=1
         else
-            echo "Push repo via: git --git-dir="$repo" --work-tree="$repo_path" push -u origin"
+            echo "Push repo via: git --git-dir="$repo" --work-tree="$repo_path" push -u origin main"
             had_echo=1
         fi
     else
