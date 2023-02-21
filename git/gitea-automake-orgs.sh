@@ -47,10 +47,10 @@ for repo in $(find . -name ".git" -type d); do
         if [[ "$org_resp" == *"user redirect does not exist"* ]]; then
             # Create the organization in Gitea
             if [ $real_run -eq 1 ]; then
-                curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/orgs" -d '{"username": "'"$org_name"'"}'
+                curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/orgs" -d `{"username": "$org_name"}`
                 echo "Created organization $org_name for repo $repo_name in $repo_path."
             else
-                echo "curl -H 'Authorization: token $GITEA_API_KEY' -X POST '$GITEA_API_URL/orgs' -d '{\"username\": \"$org_name\"}'"
+                echo "curl -H 'Authorization: token $GITEA_API_KEY' -X POST '$GITEA_API_URL/orgs' -d `{\"username\": \"$org_name\"}`"
             fi
         else
             echo "Organization $org_name already exists in Gitea, skipping creation."
