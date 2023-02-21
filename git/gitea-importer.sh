@@ -42,7 +42,6 @@ for repo in $(find . -name ".git" -type d); do
         
         # Check if the organization already exists in Gitea
         org_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X GET "$GITEA_API_URL/orgs/$org_name")
-        echo $org_resp
         if [[ "$org_resp" == *"user redirect does not exist"* ]]; then
             # Create the organization in Gitea
             if [ $real_run -eq 1 ]; then
@@ -79,7 +78,6 @@ for repo in $(find . -name ".git" -type d); do
         
         # Check if the repo already exists in the organization
         org_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X GET "$GITEA_API_URL/repos/$repo_name")
-        echo $org_resp
         if [[ "$org_resp" == "404 page not found" ]]; then
             # Create the repo in Gitea
             if [ $real_run -eq 1 ]; then
