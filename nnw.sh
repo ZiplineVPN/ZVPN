@@ -104,7 +104,7 @@ if [ ! "$dir" == "$binDir" ]; then
     exit
 else
     #     sudo chown $USER:$USER "$scriptDir"
-    cd ""
+    cd "$scriptDir"
     updateCheck
     cmdEndIndex=$(isolateScript "$@")
     if [ $((cmdEndIndex-1)) -lt 0 ]; then
@@ -123,7 +123,7 @@ else
         fi
     else
         script=${@:1:cmdEndIndex-1}
-        script="${script// //}.sh"
+        script="$dir/${script// //}.sh"
     fi
     if [ -f "$script" ]; then
         echo "Running $script"
@@ -132,6 +132,7 @@ else
         for a in "${@:cmdEndIndex}"; do
             args="$args \"$a\""
         done
+        cd "$execDir"
         "$script" $args
         #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
         #"$execDir/nnw-script.sh"
