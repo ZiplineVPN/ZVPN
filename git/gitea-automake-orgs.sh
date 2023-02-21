@@ -15,6 +15,7 @@ do
     case $key in
         --real-run)
             real_run=1
+            echo "--real-run was provided, will actually run the script"
             shift
         ;;
         # *)
