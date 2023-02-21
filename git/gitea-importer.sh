@@ -90,7 +90,7 @@ for repo in $(find . -name ".git" -type d); do
                 echo "curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d \"{ \"name\": \"$repo_name\"}\""
             fi
         else
-            echo "Organization $org_name already exists in Gitea, skipping creation."
+            echo "Repo $repo_name already exists in Org $org_name, skipping creation."
         fi
     else
         echo "Remote URL $remote_url for $repo_path is not a Gitea URL, skipping."
