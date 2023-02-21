@@ -80,7 +80,7 @@ for repo in $(find . -name ".git" -type d); do
         # Check if the repo already exists in the organization
         org_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X GET "$GITEA_API_URL/repos/$repo_name")
         echo $org_resp
-        if [[ "$org_resp" == *"The target couldn't be found."* ]]; then
+        if [[ "$org_resp" == "404 page not found" ]]; then
             # Create the repo in Gitea
             if [ $real_run -eq 1 ]; then
                 
