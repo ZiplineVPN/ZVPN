@@ -107,6 +107,7 @@ else
     cd ""
     updateCheck
     cmdEndIndex=$(isolateScript "$@")
+    echo $((cmdEndIndex-1))
     if [ $((cmdEndIndex-1)) -lt 0 ]; then
         cmdEndIndex=$(isolateDir "$@")
         if [ $((cmdEndIndex-1)) -gt 0 ]; then
