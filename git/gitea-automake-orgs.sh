@@ -46,7 +46,7 @@ for repo in $(find . -name ".git" -type d); do
         # Check if the organization already exists in Gitea
         org_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X GET "$GITEA_API_URL/orgs/$org_name")
         echo $org_repo
-        if [ "$org_resp" = "Not Found" ]; then
+        if [[ "$org_resp" == *"user redirect does not exist"* ]]; then
             # Create the organization in Gitea
             if [ $real_run -eq 1 ]; then
                 curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/admin/users/$user_name/orgs" -d '{"username": "'"$org_name"'"}'
