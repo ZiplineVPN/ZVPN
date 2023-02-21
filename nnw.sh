@@ -133,7 +133,7 @@ else
             args="$args \"$a\""
         done
         cd "$execDir"
-        "$dir/$script" $args
+        "$scriptDir/$script" $args
         #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
         #"$execDir/nnw-script.sh"
         #rm "$execDir/nnw-script.sh"
