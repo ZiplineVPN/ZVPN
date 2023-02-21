@@ -134,6 +134,24 @@ find . -name ".git" -type d | while IFS= read -r repo; do
             echo "Repo $repo_name already exists in Org $org_name, skipping creation."
         fi
 
+        current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+        # Check if the current branch is "master"
+        if [ "$current_branch" == "master" ]; then
+            # Rename the branch to "main"
+            git branch -m main
+
+            # Update the default branch to "main"
+            git symbolic-ref refs/remotes/origin/HEAD refs/heads/main
+
+            # Push the changes to the remote repo
+            git push origin main
+
+            echo "Repo has been converted to use the 'main' branch"
+        else
+            echo "Repo is already using a branch other than 'master'"
+        fi
+
         #push the repo
         if [ $real_run -eq 1 ]; then
             git --git-dir="$repo" --work-tree="$repo_path" push -u origin main
