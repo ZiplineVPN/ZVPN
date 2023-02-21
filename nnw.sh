@@ -132,8 +132,8 @@ else
         for a in "${@:cmdEndIndex}"; do
             args="$args \"$a\""
         done
-        cd "$dir"
-        "$execDir/$script" $args
+        cd "$execDir"
+        "$dir/$script" $args
         #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
         #"$execDir/nnw-script.sh"
         #rm "$execDir/nnw-script.sh"
