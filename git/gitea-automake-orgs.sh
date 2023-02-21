@@ -25,7 +25,7 @@ do
 done
 
 # Find all git repositories in the current working directory and its subdirectories
-for repo in $(find . -name ".git" -type d); do
+for repo in $(find "$(pwd)" -name ".git" -type d); do
     # Get the path to the parent directory of the git repository
     repo_path="$(dirname "$repo")"
     
