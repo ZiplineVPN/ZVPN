@@ -12,7 +12,7 @@ do
     key="$1"
     echo "Processing key: $key"
     case $key in
-        --real-run)
+        "--real-run")
             real_run=1
             echo "REAL RUN! This script will actually make changes to Gitea."
 
