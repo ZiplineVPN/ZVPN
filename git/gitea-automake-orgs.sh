@@ -6,7 +6,7 @@ GITEA_API_URL="https://git.nicknet.works/api/v1"
 read -p "Enter your Gitea API key: " GITEA_API_KEY
 
 real_run=0
-directory="."
+# directory="."
 
 while [[ $# -gt 0 ]]
 do
@@ -17,15 +17,12 @@ do
             real_run=1
             shift
         ;;
-        *)
-            directory="$1"
-            shift
-        ;;
+        # *)
+        #     directory="$1"
+        #     shift
+        # ;;
     esac
 done
-
-# Change to specified directory
-cd "$directory" || exit 1
 
 # Find all git repositories in the current working directory and its subdirectories
 for repo in $(find . -name ".git" -type d); do
