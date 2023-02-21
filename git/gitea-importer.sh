@@ -2,8 +2,6 @@
 
 # Set Gitea API URL and access token
 GITEA_API_URL="https://git.nicknet.works/api/v1"
-# Prompt for Gitea API key
-read -p "Enter your Gitea API key: " GITEA_API_KEY
 
 real_run=0
 
@@ -31,12 +29,17 @@ if [ $real_run -eq 1 ]; then
     echo "If you don't want to do this, then don't run this script with the --real-run flag."
     echo "This script will now sleep for 10 seconds to give you time to cancel it."
     echo "Ctrl+C to cancel."
+    echo
     sleep 10
 else
     echo "This is a DRY RUN! This script will NOT make any changes to Gitea."
     echo "It will only print the commands that would have been run."
     echo "If you want to make the changes to Gitea, and you are certain you're ready. Use the --real-run flag."
+    echo 
 fi
+
+# Prompt for Gitea API key
+read -p "Enter your Gitea API key: " GITEA_API_KEY
 
 # Find all git repositories in the current working directory and its subdirectories
 find . -name ".git" -type d | while IFS= read -r repo; do
