@@ -93,6 +93,9 @@ for repo in $(find . -name ".git" -type d); do
         else
             echo "Repo $repo_name already exists in Org $org_name, skipping creation."
         fi
+
+        #push the repo
+        git --git-dir="$repo" --work-tree="$repo_path" push -u origin
     else
         echo "Remote URL $remote_url for $repo_path is not a Gitea URL, skipping."
     fi
