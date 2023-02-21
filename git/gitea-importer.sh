@@ -47,8 +47,10 @@ for repo in $(find . -name ".git" -type d); do
             if [ $real_run -eq 1 ]; then
                 curl -H 'Content-Type: application/json' -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/orgs" -d "{\"username\": \"$org_name\", \"visibility\":\"limited\"}"
                 echo "Created organization $org_name for repo $repo_name in $repo_path."
+                echo
             else
                 echo "Make org via: curl -H 'Authorization: token $GITEA_API_KEY' -X POST '$GITEA_API_URL/orgs' -d {\"username\": \"$org_name\"}"
+                echo
             fi
         else
             echo "Organization $org_name already exists in Gitea, skipping creation."
@@ -68,9 +70,11 @@ for repo in $(find . -name ".git" -type d); do
                     # Update the remote URL
                     git --git-dir="$repo" --work-tree="$repo_path" remote set-url origin "$new_url"
                     echo "Updated remote URL for $repo_path: $new_url"
+                    echo
                 else
                     # Print the command that would have been run
-                    echo "git --git-dir=$repo --work-tree=$repo_path remote set-url origin $new_url"
+                    echo "Update remote URL for $repo_path: git --git-dir=$repo --work-tree=$repo_path remote set-url origin $new_url"
+                    echo
                 fi
             else
                 echo "Remote URL for $repo_path is already set to $new_url, skipping url update."
@@ -86,6 +90,7 @@ for repo in $(find . -name ".git" -type d); do
                 
                 curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d "{ \"name\": \"$repo_name\"}"
                 echo "Created organization $org_name for repo $repo_name in $repo_path."
+                echo 
             else
                 echo "Make org repo via: curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d \"{ \"name\": \"$repo_name\"}\""
                 echo
@@ -98,6 +103,7 @@ for repo in $(find . -name ".git" -type d); do
             if [ $real_run -eq 1 ]; then
                 git --git-dir="$repo" --work-tree="$repo_path" push -u origin
                 echo "Pushing repo $repo_name in $repo_path."
+                echo
             else
                 echo "Push repo via: git --git-dir="$repo" --work-tree="$repo_path" push -u origin"
                 echo
