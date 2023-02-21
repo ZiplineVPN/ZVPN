@@ -121,9 +121,10 @@ else
                 fi
             done
         else
-            script=${@:1:cmdEndIndex-1}
-            script="${script// //}.sh"
         fi
+    else
+        script=${@:1:cmdEndIndex-1}
+        script="${script// //}.sh"
     fi
     if [ -f "$script" ]; then
         echo "Running $script"
