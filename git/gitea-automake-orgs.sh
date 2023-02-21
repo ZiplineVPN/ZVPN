@@ -39,18 +39,18 @@ for repo in $(find . -name ".git" -type d); do
     # Check if the remote URL is a Gitea URL
     if [[ $remote_url =~ ^(https?:\/\/)([^\/]+)\/([^\/]+)\/([^\/]+)\/?$ ]]; then
         org_name=${BASH_REMATCH[3]}
-        user_name=${BASH_REMATCH[4]}
+        repo_name=${BASH_REMATCH[4]}
         
         # Check if the organization already exists in Gitea
         org_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X GET "$GITEA_API_URL/orgs/$org_name")
         echo $org_repo
-        if [ "$org_resp" = "Not Found" ]; then
+        if [[ "$org_resp" == *"user redirect does not exist"* ]]; then
             # Create the organization in Gitea
             if [ $real_run -eq 1 ]; then
-                curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/admin/users/$user_name/orgs" -d '{"username": "'"$org_name"'"}'
-                echo "Created organization $org_name for user $user_name in $repo_path."
+                curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/orgs" -d '{"username": "'"$org_name"'"}'
+                echo "Created organization $org_name for repo $repo_name in $repo_path."
             else
-                echo "curl -H 'Authorization: token $GITEA_API_KEY' -X POST '$GITEA_API_URL/admin/users/$user_name/orgs' -d '{\"username\": \"$org_name\"}'"
+                echo "curl -H 'Authorization: token $GITEA_API_KEY' -X POST '$GITEA_API_URL/orgs' -d '{\"username\": \"$org_name\"}'"
             fi
         else
             echo "Organization $org_name already exists in Gitea, skipping creation."
