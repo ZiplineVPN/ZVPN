@@ -39,7 +39,7 @@ else
 fi
 
 # Find all git repositories in the current working directory and its subdirectories
-for repo in $(find . -name ".git" -type d); do
+find . -name ".git" -type d | while IFS= read -r repo; do
     # Get the path to the parent directory of the git repository
     repo_path="$(dirname "$repo")"
     
@@ -63,10 +63,8 @@ for repo in $(find . -name ".git" -type d); do
             if [ $real_run -eq 1 ]; then
                 curl -H 'Content-Type: application/json' -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/orgs" -d "{\"username\": \"$org_name\", \"visibility\":\"limited\"}"
                 echo "Created organization $org_name for repo $repo_name in $repo_path."
-                echo
             else
                 echo "Make org via: curl -H 'Authorization: token $GITEA_API_KEY' -X POST '$GITEA_API_URL/orgs' -d {\"username\": \"$org_name\"}"
-                echo
             fi
         else
             echo "Organization $org_name already exists in Gitea, skipping creation."
@@ -85,11 +83,9 @@ for repo in $(find . -name ".git" -type d); do
                     # Update the remote URL
                     git --git-dir="$repo" --work-tree="$repo_path" remote set-url origin "$new_url"
                     echo "Updated remote URL for $repo_path: $new_url"
-                    echo
                 else
                     # Print the command that would have been run
                     echo "Update remote URL for $repo_path: git --git-dir=$repo --work-tree=$repo_path remote set-url origin $new_url"
-                    echo
                 fi
             else
                 echo "Remote URL for $repo_path is already set to $new_url, skipping url update."
@@ -114,14 +110,14 @@ for repo in $(find . -name ".git" -type d); do
         fi
 
         #push the repo
-            if [ $real_run -eq 1 ]; then
-                git --git-dir="$repo" --work-tree="$repo_path" push -u origin
-                echo "Pushing repo $repo_name in $repo_path."
-                echo
-            else
-                echo "Push repo via: git --git-dir="$repo" --work-tree="$repo_path" push -u origin"
-                echo
-            fi
+        if [ $real_run -eq 1 ]; then
+            git --git-dir="$repo" --work-tree="$repo_path" push -u origin
+            echo "Pushing repo $repo_name in $repo_path."
+            echo
+        else
+            echo "Push repo via: git --git-dir="$repo" --work-tree="$repo_path" push -u origin"
+            echo
+        fi
     else
         echo "Remote URL $remote_url for $repo_path is not a Gitea URL, skipping."
     fi
