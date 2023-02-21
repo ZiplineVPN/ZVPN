@@ -121,13 +121,11 @@ else
                     echo " - $(basename "$file")"
                 fi
             done
-        else
-            echo "It was ascript!"
-            script=${@:1:cmdEndIndex-1}
-            script="${script// //}"
-            
+            exit;
         fi
     fi
+    script=${@:1:cmdEndIndex-1}
+    script="${script// //}"
     echo "Script '$script' is a file. Running it..."
     if [ -f "$script" ]; then
         echo "Running $script"
