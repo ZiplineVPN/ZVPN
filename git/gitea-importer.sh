@@ -16,7 +16,7 @@ do
         shift
     ;;
     *)
-        echo "Default case '$1'"
+        echo "Invalid non-halting arg: '$1'"
         shift
     ;;
     esac
