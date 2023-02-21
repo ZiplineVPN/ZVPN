@@ -128,6 +128,7 @@ else
             
         fi
     fi
+    echo "Script '$script' is a file. Running it..."
     if [ -f "$script" ]; then
         echo "Running $script"
         chmod +x "$script"
