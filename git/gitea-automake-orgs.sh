@@ -5,9 +5,7 @@ GITEA_API_URL="https://git.nicknet.works/api/v1"
 # Prompt for Gitea API key
 read -p "Enter your Gitea API key: " GITEA_API_KEY
 
-if $
 real_run=0
-# directory="."
 
 while [[ $# -gt 0 ]]
 do
@@ -16,19 +14,14 @@ do
     case $key in
         --real-run)
             real_run=1
-            echo "--real-run was provided, will actually run the script"
             shift
         ;;
-        # *)
-        #     directory="$1"
-        #     shift
-        # ;;
         *)
-        break
+            shift
         ;;
     esac
 done
-echo "Scanning git repos"
+
 # Find all git repositories in the current working directory and its subdirectories
 for repo in $(find . -name ".git" -type d); do
     # Get the path to the parent directory of the git repository
@@ -51,17 +44,16 @@ for repo in $(find . -name ".git" -type d); do
         # Check if the organization already exists in Gitea
         org_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X GET "$GITEA_API_URL/orgs/$org_name")
         echo $org_repo
-        if [[ "$org_resp" == *"user redirect does not exist"* ]]; then
+        if [ "$org_resp" = "Not Found" ]; then
             # Create the organization in Gitea
             if [ $real_run -eq 1 ]; then
-                curl -v -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/admin/users/$user_name/orgs" -d '{"username": "'"$org_name"'"}'
+                curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/admin/users/$user_name/orgs" -d '{"username": "'"$org_name"'"}'
                 echo "Created organization $org_name for user $user_name in $repo_path."
             else
                 echo "curl -H 'Authorization: token $GITEA_API_KEY' -X POST '$GITEA_API_URL/admin/users/$user_name/orgs' -d '{\"username\": \"$org_name\"}'"
             fi
         else
             echo "Organization $org_name already exists in Gitea, skipping creation."
-            echo "Payload: $org_resp"
         fi
     else
         echo "Remote URL $remote_url for $repo_path is not a Gitea URL, skipping."
