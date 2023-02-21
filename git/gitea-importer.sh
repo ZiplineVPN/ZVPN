@@ -101,15 +101,19 @@ find . -name ".git" -type d | while IFS= read -r repo; do
         fi
 
         new_url="$GITEA_URL/$org_name/$repo_name/"
-        if [ $real_run -eq 1 ]; then
-            # Update the remote URL
-            git --git-dir="$repo" --work-tree="$repo_path" remote set-url origin "$new_url"
-            echo "Updated and added Gitea to remote URL for $repo_path: from $remote_url to $new_url"
-            had_echo=1
+        if [ "$remote_url" != "$new_url" ]; then
+            if [ $real_run -eq 1 ]; then
+                # Update the remote URL
+                git --git-dir="$repo" --work-tree="$repo_path" remote set-url origin "$new_url"
+                echo "Updated and added Gitea to remote URL for $repo_path: from $remote_url to $new_url"
+                had_echo=1
+            else
+                # Print the command that would have been run
+                echo "Updated and added Gitea to remote URL for $repo_path: from $remote_url to $new_url via: git --git-dir="$repo" --work-tree="$repo_path" remote set-url origin "$new_url""
+                had_echo=1
+            fi
         else
-            # Print the command that would have been run
-            echo "Updated and added Gitea to remote URL for $repo_path: from $remote_url to $new_url via: git --git-dir="$repo" --work-tree="$repo_path" remote set-url origin "$new_url""
-            had_echo=1
+            echo "Remote URL for $repo_path is already set to $new_url, skipping url update."
         fi
 
         # Check if the repo already exists in the organization
