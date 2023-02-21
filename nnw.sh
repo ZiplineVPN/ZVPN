@@ -104,11 +104,13 @@ if [ ! "$dir" == "$binDir" ]; then
     exit
 else
     #     sudo chown $USER:$USER "$scriptDir"
-    cd "$scriptDir"
+    cd ""
     updateCheck
     cmdEndIndex=$(isolateScript "$@")
     if [ $((cmdEndIndex-1)) -lt 0 ]; then
         cmdEndIndex=$(isolateDir "$@")
+        script=${@:1:cmdEndIndex-1}
+        script="${script// //}"
         if [ $((cmdEndIndex-1)) -eq 0 ]; then
             script=${@:1:cmdEndIndex-1}
             script="${script// //}"
@@ -121,8 +123,8 @@ else
                 fi
             done
         else
-            echo "Error: not a valid script."
-            exit 1
+            script=${@:1:cmdEndIndex-1}
+            script="${script// //}"
         fi
     fi
     if [ -f "$script" ]; then
