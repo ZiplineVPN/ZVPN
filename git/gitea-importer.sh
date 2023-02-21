@@ -138,7 +138,7 @@ find . -name ".git" -type d | while IFS= read -r repo; do
 
         #push the repo
         if [ $real_run -eq 1 ]; then
-            git --git-dir="$repo" --work-tree="$repo_path" push -u origin
+            git --git-dir="$repo" --work-tree="$repo_path" push -u origin main
             echo "Pushing repo $repo_name in $repo_path."
             had_echo=1
         else
