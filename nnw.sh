@@ -107,7 +107,6 @@ else
     cd ""
     updateCheck
     cmdEndIndex=$(isolateScript "$@")
-    echo $((cmdEndIndex-1))
     if [ $((cmdEndIndex-1)) -lt 0 ]; then
         cmdEndIndex=$(isolateDir "$@")
         if [ $((cmdEndIndex-1)) -gt 0 ]; then
@@ -121,13 +120,12 @@ else
                     echo " - $(basename "$file")"
                 fi
             done
-            exit;
+        else
+            script=${@:1:cmdEndIndex-1}
+            script="${script// //}.sh"
         fi
     fi
-    script=${@:1:cmdEndIndex-1}
-    script="${script// //}"
-    echo "Script '$dir/$script' is a file. Running it..."
-    if [ -f "$dir/$script" ]; then
+    if [ -f "$script" ]; then
         echo "Running $script"
         chmod +x "$script"
         args=""
