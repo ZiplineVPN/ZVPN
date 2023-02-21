@@ -101,7 +101,7 @@ find . -name ".git" -type d | while IFS= read -r repo; do
         fi
 
         if [[ $remote_url == "$GITEA_URL"* ]]; then
-            new_url="$GITEA_URL$org_name/$repo_name/"
+            new_url="$GITEA_URL/$org_name/$repo_name/"
             if [ "$remote_url" != "$new_url" ]; then
                 if [ $real_run -eq 1 ]; then
                     # Update the remote URL
