@@ -109,9 +109,7 @@ else
     cmdEndIndex=$(isolateScript "$@")
     if [ $((cmdEndIndex-1)) -lt 0 ]; then
         cmdEndIndex=$(isolateDir "$@")
-        script=${@:1:cmdEndIndex-1}
-        script="${script// //}"
-        if [ $((cmdEndIndex-1)) -eq 0 ]; then
+        if [ $((cmdEndIndex-1)) -lt 0 ]; then
             script=${@:1:cmdEndIndex-1}
             script="${script// //}"
             echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
