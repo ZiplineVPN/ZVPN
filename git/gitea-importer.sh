@@ -48,10 +48,11 @@ for repo in $(find . -name ".git" -type d); do
                 curl -H 'Content-Type: application/json' -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/orgs" -d "{\"username\": \"$org_name\", \"visibility\":\"limited\"}"
                 echo "Created organization $org_name for repo $repo_name in $repo_path."
             else
-                echo "curl -H 'Authorization: token $GITEA_API_KEY' -X POST '$GITEA_API_URL/orgs' -d {\"username\": \"$org_name\"}"
+                echo "Make org via: curl -H 'Authorization: token $GITEA_API_KEY' -X POST '$GITEA_API_URL/orgs' -d {\"username\": \"$org_name\"}"
             fi
         else
             echo "Organization $org_name already exists in Gitea, skipping creation."
+            echo
         fi
         
         # Check if the remote URL contains username and password
@@ -73,6 +74,7 @@ for repo in $(find . -name ".git" -type d); do
                 fi
             else
                 echo "Remote URL for $repo_path is already set to $new_url, skipping url update."
+                echo
             fi
         fi
         
@@ -85,7 +87,8 @@ for repo in $(find . -name ".git" -type d); do
                 curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d "{ \"name\": \"$repo_name\"}"
                 echo "Created organization $org_name for repo $repo_name in $repo_path."
             else
-                echo "curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d \"{ \"name\": \"$repo_name\"}\""
+                echo "Make org repo via: curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d \"{ \"name\": \"$repo_name\"}\""
+                echo
             fi
         else
             echo "Repo $repo_name already exists in Org $org_name, skipping creation."
