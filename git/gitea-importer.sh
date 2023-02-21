@@ -54,7 +54,6 @@ for repo in $(find . -name ".git" -type d); do
             fi
         else
             echo "Organization $org_name already exists in Gitea, skipping creation."
-            echo
         fi
         
         # Check if the remote URL contains username and password
@@ -78,7 +77,6 @@ for repo in $(find . -name ".git" -type d); do
                 fi
             else
                 echo "Remote URL for $repo_path is already set to $new_url, skipping url update."
-                echo
             fi
         fi
         
