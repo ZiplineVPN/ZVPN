@@ -124,8 +124,9 @@ find . -name ".git" -type d | while IFS= read -r repo; do
             # Create the repo in Gitea
             if [ $real_run -eq 1 ]; then
 
-                curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d "{ \"name\": \"$repo_name\"}"
-                echo "Created repo $repo_name for repo $org_name in $repo_path."
+                repo_create_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d "{ \"name\": \"$repo_name\"}")
+                echo "Created repo $repo_name for org $org_name in $repo_path."
+                echo "Repo create response: $repo_create_resp"
                 had_echo=1
             else
                 echo "Make org repo via: curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d \"{ \"name\": \"$repo_name\"}\""
