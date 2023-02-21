@@ -57,7 +57,7 @@ find . -name ".git" -type d | while IFS= read -r repo; do
     # Check if the remote URL is a Gitea URL
     if [[ $remote_url =~ ^(https?:\/\/)([^\/]+)\/([^\/]+)\/([^\/]+)\/?$ ]]; then
         org_name=${BASH_REMATCH[3]}
-        repo_name=${BASH_REMATCH[4]}
+        repo_name=${BASH_REMATCH[4]%.git}
 
         # Check if the organization already exists in Gitea
         org_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X GET "$GITEA_API_URL/orgs/$org_name")
