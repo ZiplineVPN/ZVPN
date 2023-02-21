@@ -139,13 +139,10 @@ find . -name ".git" -type d | while IFS= read -r repo; do
         # Check if the current branch is "master"
         if [ "$current_branch" == "master" ]; then
             # Rename the branch to "main"
-            git branch -m main
+            git --git-dir="$repo" --work-tree="$repo_path" branch -m main
 
             # Update the default branch to "main"
-            git symbolic-ref refs/remotes/origin/HEAD refs/heads/main
-
-            # Push the changes to the remote repo
-            git push origin main
+            git --git-dir="$repo" --work-tree="$repo_path" symbolic-ref refs/remotes/origin/HEAD refs/heads/main
 
             echo "Repo has been converted to use the 'main' branch"
         else
