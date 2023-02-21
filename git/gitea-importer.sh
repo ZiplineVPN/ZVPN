@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Set Gitea API URL and access token
-GITEA_API_URL="https://git.nicknet.works/api/v1"
+GITEA_URL="https://git.nicknet.works"
+GITEA_API_URL="${GITEA_URL}/api/v1"
 
 real_run=0
 
@@ -99,6 +100,24 @@ find . -name ".git" -type d | while IFS= read -r repo; do
             fi
         fi
 
+        if [[ $remote_url == "$GITEA_URL"* ]]; then
+            new_url="$GITEA_URL$org_name/$repo_name/"
+            if [ "$remote_url" != "$new_url" ]; then
+                if [ $real_run -eq 1 ]; then
+                    # Update the remote URL
+                    git --git-dir="$repo" --work-tree="$repo_path" remote set-url origin "$new_url"
+                    echo "Updated remote URL for $repo_path: $new_url"
+                    had_echo=1
+                else
+                    # Print the command that would have been run
+                    echo "Update remote URL for $repo_path: git --git-dir=$repo --work-tree=$repo_path remote set-url origin $new_url"
+                    had_echo=1
+                fi
+            else
+                echo "Remote URL for $repo_path is already set to $new_url, skipping url update."
+            fi
+        fi
+
         # Check if the repo already exists in the organization
         org_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X GET "$GITEA_API_URL/repos/$repo_name")
         if [[ "$org_resp" == "404 page not found" ]]; then
@@ -106,7 +125,7 @@ find . -name ".git" -type d | while IFS= read -r repo; do
             if [ $real_run -eq 1 ]; then
 
                 curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d "{ \"name\": \"$repo_name\"}"
-                echo "Created organization $org_name for repo $repo_name in $repo_path."
+                echo "Created repo $repo_name for repo $org_name in $repo_path."
                 had_echo=1
             else
                 echo "Make org repo via: curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/user/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d \"{ \"name\": \"$repo_name\"}\""
