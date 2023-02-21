@@ -110,7 +110,7 @@ find . -name ".git" -type d | while IFS= read -r repo; do
                     had_echo=1
                 else
                     # Print the command that would have been run
-                    echo "Update remote URL for $repo_path: git --git-dir=$repo --work-tree=$repo_path remote set-url origin $new_url"
+                    echo "Updated and added Gitea to remote URL for $repo_path: from $remote_url to $new_url via: git --git-dir="$repo" --work-tree="$repo_path" remote set-url origin "$new_url""
                     had_echo=1
                 fi
             else
