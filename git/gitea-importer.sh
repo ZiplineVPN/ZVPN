@@ -106,7 +106,7 @@ find . -name ".git" -type d | while IFS= read -r repo; do
                 if [ $real_run -eq 1 ]; then
                     # Update the remote URL
                     git --git-dir="$repo" --work-tree="$repo_path" remote set-url origin "$new_url"
-                    echo "Updated remote URL for $repo_path: from $remote_url to $new_url"
+                    echo "Updated and added Gitea to remote URL for $repo_path: from $remote_url to $new_url"
                     had_echo=1
                 else
                     # Print the command that would have been run
