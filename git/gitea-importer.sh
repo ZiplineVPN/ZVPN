@@ -132,7 +132,7 @@ find . -name ".git" -type d | while IFS= read -r repo; do
             echo "Repo $repo_name already exists in Org $org_name, skipping creation."
         fi
 
-        current_branch=$(git --git-dir="$repo" --work-tree="$repo_path"  rev-parse --abbrev-ref HEAD)
+        current_branch=$(git --git-dir="$repo" --work-tree="$repo_path" rev-parse --abbrev-ref HEAD)
 
         # Check if the current branch is "master"
         if [ "$current_branch" == "master" ]; then
@@ -141,6 +141,7 @@ find . -name ".git" -type d | while IFS= read -r repo; do
 
             # Update the default branch to "main"
             git --git-dir="$repo" --work-tree="$repo_path" symbolic-ref refs/remotes/origin/HEAD refs/heads/main
+            git --git-dir="$repo" --work-tree="$repo_path" branch -D master
 
             echo "Repo has been converted to use the 'main' branch"
         else
