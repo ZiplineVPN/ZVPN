@@ -5,6 +5,7 @@ GITEA_API_URL="https://git.nicknet.works/api/v1"
 # Prompt for Gitea API key
 read -p "Enter your Gitea API key: " GITEA_API_KEY
 
+if $
 real_run=0
 # directory="."
 
@@ -22,6 +23,9 @@ do
         #     directory="$1"
         #     shift
         # ;;
+        *)
+        break
+        ;;
     esac
 done
 echo "Scanning git repos"
