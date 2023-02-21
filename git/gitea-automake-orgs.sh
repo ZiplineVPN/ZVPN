@@ -56,6 +56,7 @@ for repo in $(find . -name ".git" -type d); do
             fi
         else
             echo "Organization $org_name already exists in Gitea, skipping creation."
+            echo "Payload: $org_resp"
         fi
     else
         echo "Remote URL $remote_url for $repo_path is not a Gitea URL, skipping."
