@@ -121,6 +121,7 @@ else
                 fi
             done
         else
+            echo "It was ascript!"
             script=${@:1:cmdEndIndex-1}
             script="${script// //}"
             if [ -f "$script" ]; then
