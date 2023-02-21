@@ -126,7 +126,7 @@ else
     fi
     script=${@:1:cmdEndIndex-1}
     script="${script// //}"
-    echo "Script '$script' is a file. Running it..."
+    echo "Script '$dir/$script' is a file. Running it..."
     if [ -f "$dir/$script" ]; then
         echo "Running $script"
         chmod +x "$script"
