@@ -95,7 +95,13 @@ for repo in $(find . -name ".git" -type d); do
         fi
 
         #push the repo
-        git --git-dir="$repo" --work-tree="$repo_path" push -u origin
+            if [ $real_run -eq 1 ]; then
+                git --git-dir="$repo" --work-tree="$repo_path" push -u origin
+                echo "Pushing repo $repo_name in $repo_path."
+            else
+                echo "Push repo via: git --git-dir="$repo" --work-tree="$repo_path" push -u origin"
+                echo
+            fi
     else
         echo "Remote URL $remote_url for $repo_path is not a Gitea URL, skipping."
     fi
