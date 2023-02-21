@@ -123,18 +123,19 @@ else
         else
             script=${@:1:cmdEndIndex-1}
             script="${script// //}"
+            if [ -f "$script" ]; then
+                echo "Running $script"
+                chmod +x "$script"
+                args=""
+                for a in "${@:cmdEndIndex}"; do
+                    args="$args \"$a\""
+                done
+                "$script" $args
+                #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
+                #"$execDir/nnw-script.sh"
+                #rm "$execDir/nnw-script.sh"
+            fi
         fi
     fi
-    if [ -f "$script" ]; then
-        echo "Running $script"
-        chmod +x "$script"
-        args=""
-        for a in "${@:cmdEndIndex}"; do
-            args="$args \"$a\""
-        done
-        "$script" $args
-        #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
-        #"$execDir/nnw-script.sh"
-        #rm "$execDir/nnw-script.sh"
-    fi
+    
 fi
