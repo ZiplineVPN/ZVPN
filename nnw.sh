@@ -123,7 +123,7 @@ else
         fi
     else
         script=${@:1:cmdEndIndex-1}
-        script="$dir/${script// //}.sh"
+        script="${script// //}.sh"
     fi
     if [ -f "$script" ]; then
         echo "Running $script"
@@ -133,7 +133,9 @@ else
             args="$args \"$a\""
         done
         cd "$execDir"
-        "$script" $args
+        echo "$dir/$script" $args
+        echo "$execDir"
+        "$dir/$script" $args
         #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
         #"$execDir/nnw-script.sh"
         #rm "$execDir/nnw-script.sh"
