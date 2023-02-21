@@ -27,10 +27,8 @@ if [ $real_run -eq 1 ]; then
     echo "It will also adjust the remote URLs of the git repositories ENMASS."
     echo "Finally, it will push the git repositories to Gitea."
     echo "If you don't want to do this, then don't run this script with the --real-run flag."
-    echo "This script will now sleep for 10 seconds to give you time to cancel it."
     echo "Ctrl+C to cancel."
     echo
-    sleep 10
 else
     echo "This is a DRY RUN! This script will NOT make any changes to Gitea."
     echo "It will only print the commands that would have been run."
