@@ -120,7 +120,6 @@ else
                     echo " - $(basename "$file")"
                 fi
             done
-        else
         fi
     else
         script=${@:1:cmdEndIndex-1}
