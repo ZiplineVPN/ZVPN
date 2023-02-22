@@ -122,7 +122,6 @@ find . -name ".git" -type d | while IFS= read -r repo; do
 
                 repo_create_resp=$(curl --silent -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/orgs/$org_name/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d "{ \"name\": \"$repo_name\"}")
                 echo "Created repo $repo_name for org $org_name in $repo_path."
-                echo "Repo create response: $repo_create_resp"
                 had_echo=1
             else
                 echo "Make org repo via: curl -H "Authorization: token $GITEA_API_KEY" -X POST "$GITEA_API_URL/orgs/$org_name/repos" -H 'accept: application/json' -H 'Content-Type: application/json' -d \"{ \"name\": \"$repo_name\"}\""
@@ -150,7 +149,7 @@ find . -name ".git" -type d | while IFS= read -r repo; do
 
         #push the repo
         if [ $real_run -eq 1 ]; then
-            git --git-dir="$repo" --work-tree="$repo_path" push -u origin main
+            git --git-dir="$repo" --work-tree="$repo_path" push --all origin
             echo "Pushing repo $repo_name in $repo_path."
             had_echo=1
         else
