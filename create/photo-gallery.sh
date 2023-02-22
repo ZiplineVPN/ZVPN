@@ -78,7 +78,7 @@ image_files=($(find . -type f \( -name "*.png" -o -name "*.svg" -o -name "*.gif"
 
 # Split the array of image files into chunks of 500
 chunk_size=500
-chunks=($(echo "${image_files[@]}" | tr ' ' '\n' | split -l $chunk_size -da 4 - gallery_chunk_))
+chunks=($(echo "${image_files[@]}" | tr ' ' '\n' | split -l $chunk_size -da 4 -))
 
 # Get the total number of chunks
 num_chunks=${#chunks[@]}
@@ -108,7 +108,9 @@ echo "</div>" >>index.html
 echo "<button class=\"toggle\" onclick=\"toggleDarkMode()\">Toggle Dark Mode</button>" >>index.html
 
 # Add JavaScript functions for pagination and dark mode toggle
-echo "<script>
+echo "
+</body>
+<script>
 function showPage(page) {
     var pages = document.getElementsByClassName('page');
     for (var i = 0; i < pages.length; i++) {
@@ -138,6 +140,4 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').match
 // Show the first page by default
 showPage(0);
 </script>
-
-</body>
 </html>" >>index.html
