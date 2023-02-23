@@ -136,8 +136,8 @@ else
         for a in "${@:cmdEndIndex}"; do
             args="$args \"$a\""
         done
-        if [ -d "includes" ]; then
-            for file in includes/*.sh; do
+        if [ -d "$scriptDir/includes" ]; then
+            for file in "$scriptDir/includes/*.sh"; do
                 if [ -f "$file" ]; then
                     #echo "Evaluating file $file"
                     source "$file"
