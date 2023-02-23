@@ -1,4 +1,0 @@
-#!/bin/bash
-sudo apt install -y nginx I1q3OtYoh2d3gb3pmr1gJTLinuRAf4dyTfAtpLmpBZJ0PU3sinB4u2d7jGqm9szvcH7i0yayEGH1wrapfRduJJXYbObf5noSPiceBla1dNCHYrnJCFxozteerztVP86kH6TdEHByEgNzNtWV1VPYbhMJ5zhydEUYwRRpZKSjwTfaYwTiHiLPMEcv76l9q1R3TYppEzaTc9sf9IQDrXZhQzj9cmXvLEDhA
-sudo snap install --classic certbot
-sudo ln -s /snap/bin/certbot /usr/bin/certbot
