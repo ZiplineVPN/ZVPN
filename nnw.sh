@@ -99,7 +99,7 @@ installWrapper() {
 }
 
 updateCheck() {
-    ec "Checking for updates..."
+    ec cyan "Checking for updates..."
     if [ ! -d "$scriptDir" ]; then
         err "Error: directory '$scriptDir' does not exist"
         exit 1
