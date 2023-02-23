@@ -38,11 +38,11 @@ installWrapper()
         ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
         chmod +x "$scriptDir/$wrapperName"
     fi
-    echo "$displayName installed "
-    echo "      $scriptName as      '$installedName'"
+    echo "$wrapperName as $displayName installed"
+    echo "      As?                 '$installedName'"
     echo "      Where?              $binDir/$installedName"
     echo "      Repo link?          $domain/$repo"
-    echo "Ready to rollout!"
+    echo "Ready to roooollout!"
 }
 
 updateCheck()
