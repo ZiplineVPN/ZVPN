@@ -11,15 +11,12 @@ scriptDir="/etc/$slugName"
 
 ##End Config Section. Don't edit below, unless you intend to change functionality.
 
-
-
 wrapperName="nnw.sh"
-dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 execDir="$(pwd)"
 
-installWrapper()
-{
-    if command -v sudo &> /dev/null; then
+installWrapper() {
+    if command -v sudo &>/dev/null; then
         sudo rm -rf "$scriptDir"
         sudo mkdir -p "$scriptDir"
         sudo chown $USER:$USER "$scriptDir"
@@ -29,7 +26,7 @@ installWrapper()
         chown $USER:$USER "$scriptDir"
     fi
     updateCheck
-    if command -v sudo &> /dev/null; then
+    if command -v sudo &>/dev/null; then
         sudo rm "$binDir/$installedName"
         sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
         sudo chmod +x "$scriptDir/$wrapperName"
@@ -45,8 +42,7 @@ installWrapper()
     echo "Ready to roooollout!"
 }
 
-updateCheck()
-{
+updateCheck() {
     echo "Checking for updates..."
     if [ ! -d "$scriptDir" ]; then
         echo "Error: directory '$scriptDir' does not exist"
@@ -58,7 +54,7 @@ updateCheck()
             echo "Remote repository has changes. Current SHA: $(git -C "$scriptDir" rev-parse HEAD) Updating local repository..."
             git -C "$scriptDir" fetch --all
             git -C "$scriptDir" reset --hard origin/main
-            if command -v sudo &> /dev/null; then
+            if command -v sudo &>/dev/null; then
                 sudo chmod +x "$scriptDir/$wrapperName"
                 sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
             else
@@ -75,9 +71,8 @@ updateCheck()
     fi
 }
 
-isolateScript()
-{
-    
+isolateScript() {
+
     pathSoFar="."
     pathAt=1
     for w in "$@"; do
@@ -91,9 +86,8 @@ isolateScript()
     return 1
 }
 
-isolateDir()
-{
-    
+isolateDir() {
+
     pathSoFar="."
     pathAt=1
     for w in "$@"; do
@@ -116,9 +110,9 @@ else
     cd "$scriptDir"
     updateCheck
     cmdEndIndex=$(isolateScript "$@")
-    if [ $((cmdEndIndex-1)) -lt 0 ]; then
+    if [ $((cmdEndIndex - 1)) -lt 0 ]; then
         cmdEndIndex=$(isolateDir "$@")
-        if [ $((cmdEndIndex-1)) -gt 0 ]; then
+        if [ $((cmdEndIndex - 1)) -gt 0 ]; then
             script=${@:1:cmdEndIndex-1}
             script="${script// //}"
             echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
@@ -136,11 +130,20 @@ else
     fi
     if [ -f "$script" ]; then
         echo "Running $script"
+        git -C "$scriptDir" reset --hard origin/main
         chmod +x "$script"
         args=""
         for a in "${@:cmdEndIndex}"; do
             args="$args \"$a\""
         done
+        if [ -d "includes" ]; then
+            for file in includes/*.sh; do
+                if [ -f "$file" ]; then
+                    #echo "Evaluating file $file"
+                    source "$file"
+                fi
+            done
+        fi
         cd "$execDir"
         "$scriptDir/$script" $args
         #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
