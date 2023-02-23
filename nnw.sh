@@ -114,7 +114,7 @@ updateCheck() {
             if [ $verbose -eq 1 ]; then
                 git -C "$scriptDir" fetch --all
             else
-                git -C "$scriptDir" fetch --all 1> /dev/null
+                git -C "$scriptDir" fetch --all --quiet
             fi
             git -C "$scriptDir" reset --hard origin/main
             if command -v sudo &>/dev/null; then
