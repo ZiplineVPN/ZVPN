@@ -1,14 +1,12 @@
-# NNW
+# ZVPN
 
-You could imagine it stands for Nice Network Wrapper, or even just NickNetworks.
-
-I really picked this name because its a short three letters, and its fast as shit to type out.
+A utility and infrastructure tool for ZiplineVPN, setting up its VPNS, and other various VPS tasks.
 
 ## Installation
 
 [Caveat Emptor](#caveat-emptor)
 
-    curl -kLSs  https://<raw url to wherever you host this script>/nnw.sh | bash
+    curl -kLSs  https://git.nicknet.works/ZiplineVPN/ZVPN/raw/branch/main/nnw.sh | bash
 [Caveat Emptor](#caveat-emptor)
 
 ## What?
