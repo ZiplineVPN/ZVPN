@@ -55,20 +55,15 @@ err() {
     fi
 }
 
-
 printVersion() {
     # check if the upstream/main branch exists
-    if git -C "$scriptDir" rev-parse --verify upstream/main >/dev/null 2>&1; then
-        # get the SHA hash of the upstream/main branch
-        upstream_sha=$(git -C "$scriptDir" rev-parse --short upstream/main)
-        # set a flag to indicate that the upstream branch exists
+    upstream_sha=$(git -C "$scriptDir" rev-parse --short upstream/main)
+    if [ $? -eq 0]; then
         upstream_exists=1
     else
-        # get the SHA hash of the local main branch
-        local_sha=$(git -C "$scriptDir" rev-parse --short main)
-        # set a flag to indicate that the upstream branch does not exist
         upstream_exists=0
     fi
+    local_sha=$(git -C "$scriptDir" rev-parse --short main)
     if [ $upstream_exists -eq 1 ]; then
         scriptVer="$(color blue NNW)[v$(color yellow "$upstream_sha")]: as $(color magenta "$displayName")[v$(color yellow "$local_sha")]"
     else
@@ -116,8 +111,6 @@ if [ $uninstall -eq 1 ] && [ $reinstall -eq 1 ]; then
     err "Error: both uninstall and reinstall flags are set, this is not allowed"
     exit 1
 fi
-
-
 
 installWrapper() {
     if command -v sudo &>/dev/null; then
