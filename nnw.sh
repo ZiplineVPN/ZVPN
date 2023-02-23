@@ -2,9 +2,9 @@
 gitUsername=""
 gitToken=""
 domain="https://git.nicknet.works"
-displayName="NNW"
+displayName="ZVPN"
 slugName=$( echo "$displayName" | awk '{print tolower($0)}')
-repo="NickNet.works/$slugName"
+repo="ZiplineVPN/$slugName"
 installedName="$slugName"
 binDir="/usr/bin"
 scriptDir="/etc/$slugName"
