@@ -45,10 +45,15 @@ installWrapper()
 updateCheck()
 {
     echo "Checking for updates..."
+    if [ ! -d "$scriptDir" ]; then
+        echo "Error: directory '$scriptDir' does not exist"
+        exit 1
+    fi
+
     if git -C "$scriptDir" remote update; then
         if ! git -C "$scriptDir" diff --quiet origin/main; then
             echo "Remote repository has changes. Current SHA: $(git -C "$scriptDir" rev-parse HEAD) Updating local repository..."
-            git -C "$scriptDir" reset --hard origin/main
+            git -C "$scriptDir" pull
             if command -v sudo &> /dev/null; then
                 sudo chmod +x "$scriptDir/$wrapperName"
                 sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
@@ -62,7 +67,7 @@ updateCheck()
         fi
     else
         echo "Error updating remote repository. Cloning new repository..."
-        git clone "$domain/$repo" "$scriptDir"
+        git clone --depth 1 "$domain/$repo" "$scriptDir"
     fi
 }
 
