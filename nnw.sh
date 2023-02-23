@@ -56,8 +56,8 @@ err() {
 }
 
 printVersion() {
-    if ![ -z ${NNW_VERSION+x} ]; then
-        if ![ -z ${NNW_FORK_VERSION+x} ]; then
+    if [ ! -z ${NNW_VERSION+x} ]; then
+        if [ ! -z ${NNW_FORK_VERSION+x} ]; then
             echoc cyan "$(color blue NNW)[$(color yellow "$NNW_VERSION")]: as $(color magenta "$displayName")[$(color yellow "$NNW_FORK_VERSION")]"
         else
             echoc cyan "$(color blue NNW)[$(color yellow "$NNW_VERSION")]: as $(color magenta "$displayName")"
