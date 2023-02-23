@@ -116,7 +116,11 @@ updateCheck() {
             else
                 git -C "$scriptDir" fetch --all --quiet
             fi
-            git -C "$scriptDir" reset --hard origin/main
+            if [ $verbose -eq 1 ]; then
+                git -C "$scriptDir" fetch --all
+            else
+                git -C "$scriptDir" reset --hard origin/main --quiet
+            fi
             if command -v sudo &>/dev/null; then
                 sudo chmod +x "$scriptDir/$wrapperName"
                 sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
