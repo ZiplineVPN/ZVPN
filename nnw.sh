@@ -49,7 +49,7 @@ err() {
 }
 
 while [[ $# -gt 0 ]]; do
-    case $1 in
+    case "$1" in
     "--verbose" | "--v")
         verbose=1
         ec green_bright "Verbosity enabled, will log lots of stuff!"
