@@ -1,6 +1,4 @@
 #!/bin/bash
-bolors=$(curl -kLSs https://git.nicknet.works/Nackloose/Bolors/raw/branch/main/bolors.sh)
-eval "$bolors"
 systemctl is-active --quiet "wg-quick@${SERVER_WG_NIC}"
 if [[ $? -ne 0 ]]; then
     echoc cyan "$(color yellow "Wireguard") does $(color red "NOT appear") to be running."
