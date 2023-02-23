@@ -105,7 +105,7 @@ updateCheck() {
         exit 1
     fi
 
-    if git -C "$scriptDir" remote update &> /dev/null; then
+    if git -C "$scriptDir" remote update &>/dev/null; then
         if ! git -C "$scriptDir" diff --ignore-space-at-eol --quiet origin/main; then
             ec cyan "Remote repository has changes."
             shaNow=$(git -C "$scriptDir" rev-parse HEAD)
@@ -168,27 +168,32 @@ isolateDir() {
 # isolateScript "$@"
 
 if [ ! "$dir" == "$binDir" ]; then
+    ec cyan "Script is not in $binDir, installing wrapper..."
     installWrapper
     exit
 else
     #     sudo chown $USER:$USER "$scriptDir"
+    ec cyan "Script is in $binDir, checking wrapper to see if its outdated..."
     cd "$scriptDir"
     updateCheck
 
     cmdEndIndex=$(isolateScript "$@")
+    ec cyan "cmdEndIndex: $cmdEndIndex"
     if [ $((cmdEndIndex - 1)) -lt 0 ]; then
+        ec cyan "Wasn't a script, lets see if its a dir."
         cmdEndIndex=$(isolateDir "$@")
         if [ $((cmdEndIndex - 1)) -gt 0 ]; then
+            ec cyan "It was a dir! Lets list the contents for the user."
             script=${@:1:cmdEndIndex-1}
             script="${script// //}"
-            ec red "Script '$script' is a directory."
-            ec cyan "Available scripts and subdirectories in this directory are:"
-            ec cyan "Scripts are $(color green "green and bold") and directories are $(color yellow "yellow and italic")"
+            echoc red "Script '$script' is a directory."
+            echoc cyan "Available scripts and subdirectories in this directory are:"
+            echoc cyan "Scripts are $(color green "green and bold") and directories are $(color yellow "yellow and italic")"
             for file in "$script"/*; do
                 if [[ -d "$file" ]]; then
-                    ec italic "\t- $(color yellow "$(basename "$file")")"
+                    echoc italic "\t- $(color yellow "$(basename "$file")")"
                 else
-                    ec bold "\t- $(color green "$(basename "$file")")"
+                    echoc bold "\t- $(color green "$(basename "$file")")"
                 fi
             done
         fi
