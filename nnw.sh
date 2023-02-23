@@ -188,12 +188,12 @@ else
             script="${script// //}"
             echoc red "Script '$script' is a directory."
             echoc cyan "Available scripts and subdirectories in this directory are:"
-            echoc cyan "Scripts are $(color green "green and bold") and directories are $(color yellow "yellow and italic")"
+            echoc cyan "Scripts are $(color green "green") and directories are $(color yellow "yellow")"
             for file in "$script"/*; do
                 if [[ -d "$file" ]]; then
-                    echoc italic "\t- $(color yellow "$(basename "$file")")"
+                    echoc yellow "\t- $(basename "$file")"
                 else
-                    echoc bold "\t- $(color green "$(basename "$file")")"
+                    echoc green "\t- $(basename "$file")"
                 fi
             done
         fi
