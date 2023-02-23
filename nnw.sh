@@ -15,6 +15,62 @@ wrapperName="nnw.sh"
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 execDir="$(pwd)"
 
+#handle arguments
+verbose=0
+uninstall=0
+reinstall=0
+
+if [ -d "$scriptDir/includes" ]; then
+    for file in "$scriptDir/includes"/*.sh; do
+        if [ -f "$file" ]; then
+            source "$file"
+        fi
+    done
+fi
+
+c() {
+    if [ $verbose -eq 1 ]; then
+        color "$@"
+    fi
+}
+
+ec() {
+    if [ $verbose -eq 1 ]; then
+        echoc "$@"
+    fi
+}
+
+err() {
+    if [ $verbose -eq 0 ]; then
+        echo "$(echoc red_bright "$@")" >&2
+    else
+        echoc red_bright "$@"
+    fi
+}
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+    "\"--verbose\"" | "\"--v\"")
+        verbose=1
+        ec green_bright "Verbosity enabled, will log lots of stuff!"
+        shift
+        ;;
+    "\"--uninstall\"")
+        uninstall=1
+        ec red_bright "Uninstall flag detected, will uninstall $(c yellow "$displayName")"
+        shift
+        ;;
+    "\"--reinstall\"")
+        reinstall=1
+        ec red_bright "Uninstall flag detected, will uninstall $(c yellow "$displayName")"
+        shift
+        ;;
+    *)
+        break
+        ;;
+    esac
+done
+
 installWrapper() {
     if command -v sudo &>/dev/null; then
         sudo rm -rf "$scriptDir"
@@ -35,23 +91,26 @@ installWrapper() {
         ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
         chmod +x "$scriptDir/$wrapperName"
     fi
-    echo "$wrapperName as $displayName installed"
-    echo "      As?                 '$installedName'"
-    echo "      Where?              $binDir/$installedName"
-    echo "      Repo link?          $domain/$repo"
-    echo "Ready to roooollout!"
+    echoc green "$(color magenta "$wrapperName") as $(color yellow "$displayName") installed"
+    echoc green "      As?                 '$installedName'"
+    echoc green "      Where?              $binDir/$installedName"
+    echoc green "      Repo link?          $domain/$repo"
+    echoc green "Ready to roooollout!"
 }
 
 updateCheck() {
-    echo "Checking for updates..."
+    ec "Checking for updates..."
     if [ ! -d "$scriptDir" ]; then
-        echo "Error: directory '$scriptDir' does not exist"
+        err "Error: directory '$scriptDir' does not exist"
         exit 1
     fi
 
     if git -C "$scriptDir" remote update; then
         if ! git -C "$scriptDir" diff --ignore-space-at-eol --quiet origin/main; then
-            echo "Remote repository has changes. Current SHA: $(git -C "$scriptDir" rev-parse HEAD) Updating local repository..."
+            ec cyan "Remote repository has changes."
+            shaNow=$(git -C "$scriptDir" rev-parse HEAD)
+            ec cyan "Pre update SHA: $(color yellow "$shaNow")"
+            ec yellow "Updating local repository..."
             git -C "$scriptDir" fetch --all
             git -C "$scriptDir" reset --hard origin/main
             if command -v sudo &>/dev/null; then
@@ -61,12 +120,14 @@ updateCheck() {
                 chmod +x "$scriptDir/$wrapperName"
                 ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
             fi
-            echo "Local repository has been updated from remote repository. Current SHA: $(git -C "$scriptDir" rev-parse HEAD)"
+            ec green "Local repository has been updated from remote repository."
+            shaNow=$(git -C "$scriptDir" rev-parse HEAD)
+            ec cyan "Post update SHA: $(color yellow "$shaNow")"
         else
-            echo "Local repository is up-to-date with remote repository."
+            ec green "Local repository is up-to-date with remote repository."
         fi
     else
-        echo "Error updating remote repository. Cloning new repository..."
+        err "Error updating remote repository. Cloning new repository..."
         git clone --depth 1 "$domain/$repo" "$scriptDir"
     fi
 }
@@ -109,18 +170,21 @@ else
     #     sudo chown $USER:$USER "$scriptDir"
     cd "$scriptDir"
     updateCheck
+
     cmdEndIndex=$(isolateScript "$@")
     if [ $((cmdEndIndex - 1)) -lt 0 ]; then
         cmdEndIndex=$(isolateDir "$@")
         if [ $((cmdEndIndex - 1)) -gt 0 ]; then
             script=${@:1:cmdEndIndex-1}
             script="${script// //}"
-            echo "Script '$script' is a directory. Available scripts and subdirectories in this directory are:"
+            ec red "Script '$script' is a directory."
+            ec cyan "Available scripts and subdirectories in this directory are:"
+            ec cyan "Scripts are $(color green "green and bold") and directories are $(color yellow "yellow and italic")"
             for file in "$script"/*; do
                 if [[ -d "$file" ]]; then
-                    echo " - $(basename "$file") (directory)"
+                    ec italic "\t- $(color yellow "$(basename "$file")")"
                 else
-                    echo " - $(basename "$file")"
+                    ec bold "\t- $(color green "$(basename "$file")")"
                 fi
             done
         fi
@@ -129,21 +193,13 @@ else
         script="${script// //}.sh"
     fi
     if [ -f "$script" ]; then
-        echo "Running $script"
+        ec green "Running $script"
         git -C "$scriptDir" reset --hard origin/main
         chmod +x "$script"
         args=""
         for a in "${@:cmdEndIndex}"; do
             args="$args \"$a\""
         done
-        if [ -d "$scriptDir/includes" ]; then
-            for file in "$scriptDir/includes"/*.sh; do
-                if [ -f "$file" ]; then
-                    echo "Evaluating file $file"
-                    source "$file"
-                fi
-            done
-        fi
         cd "$execDir"
         source "$scriptDir/$script" $args
         #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
