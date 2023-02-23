@@ -51,7 +51,7 @@ updateCheck()
     fi
 
     if git -C "$scriptDir" remote update; then
-        if ! git -C "$scriptDir" diff --ignore-space-at-eol --quiet origin/main; then
+        if ! git -C "$scriptDir" diff --quiet origin/main; then
             echo "Remote repository has changes. Current SHA: $(git -C "$scriptDir" rev-parse HEAD) Updating local repository..."
             git -C "$scriptDir" fetch --all
             git -C "$scriptDir" reset --hard origin/main
