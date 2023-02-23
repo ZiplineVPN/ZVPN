@@ -58,7 +58,8 @@ err() {
 printVersion() {
     # check if the upstream/main branch exists
     upstream_sha=$(git -C "$scriptDir" rev-parse --short upstream/main)
-    if [ $? -eq 0]; then
+    retVal=$?
+    if [ $retVal -eq 0]; then
         upstream_exists=1
     else
         upstream_exists=0
@@ -69,7 +70,7 @@ printVersion() {
     else
         scriptVer="$(color blue NNW): as $(color magenta "$displayName")[v$(color yellow "$local_sha")]"
     fi
-    echoc cyan $scriptVer
+    echoc cyan "$scriptVer"
 }
 
 while [[ $# -gt 0 ]]; do
