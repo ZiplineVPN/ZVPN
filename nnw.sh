@@ -145,7 +145,7 @@ else
             done
         fi
         cd "$execDir"
-        "$scriptDir/$script" $args
+        source "$scriptDir/$script" $args
         #wget -q -O "$execDir/nnw-script.sh" "$rawViewPattern/$cmdEndIndex.sh"
         #"$execDir/nnw-script.sh"
         #rm "$execDir/nnw-script.sh"
