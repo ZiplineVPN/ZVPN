@@ -90,7 +90,5 @@ echoc() {
     echo -ne "${!c}$*${reset}\n"
 }
 
-echo "Bolors loaded."
-
 # Example usage
 #color green "Hello world!"
