@@ -1,5 +1,5 @@
 #!/bin/bash
-$(curl -kLSs https://git.nicknet.works/Nackloose/Bolors/raw/branch/main/bolors.sh)
+curl -kLSs https://git.nicknet.works/Nackloose/Bolors/raw/branch/main/bolors.sh | eval
 color green "Checking for Wireguard..."
 if [[ -e /etc/wireguard/params ]]; then
     echo "Wireguard Installed."
