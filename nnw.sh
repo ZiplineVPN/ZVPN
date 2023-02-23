@@ -58,8 +58,7 @@ err() {
 printVersion() {
     # check if the upstream/main branch exists
     upstream_sha=$(git -C "$scriptDir" rev-parse --short upstream/main)
-    retVal=$?
-    if [ $retVal -eq 0]; then
+    if [ $? -eq 0 ]; then
         upstream_exists=1
     else
         upstream_exists=0
@@ -234,7 +233,7 @@ else
     cd "$scriptDir"
     updateCheck
 
-    if [ $verbosity -eq 1 ]; then
+    if [ $verbose -eq 1 ]; then
         printVersion
     fi
 
