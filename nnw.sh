@@ -105,7 +105,7 @@ updateCheck() {
         exit 1
     fi
 
-    if git -C "$scriptDir" remote update --quiet; then
+    if git -C "$scriptDir" remote update &> /dev/null; then
         if ! git -C "$scriptDir" diff --ignore-space-at-eol --quiet origin/main; then
             ec cyan "Remote repository has changes."
             shaNow=$(git -C "$scriptDir" rev-parse HEAD)
