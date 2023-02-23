@@ -40,6 +40,14 @@ ec() {
     fi
 }
 
+shouldDevNull() {
+    if [ $verbose -eq 1 ]; then
+        echo "1> /dev/null"
+    else
+        echo ""
+    fi
+}
+
 err() {
     if [ $verbose -eq 0 ]; then
         echo "$(echoc red_bright "$@")" >&2
@@ -111,7 +119,7 @@ updateCheck() {
             shaNow=$(git -C "$scriptDir" rev-parse HEAD)
             ec cyan "Pre update SHA: $(color yellow "$shaNow")"
             ec yellow "Updating local repository..."
-            git -C "$scriptDir" fetch --all
+            git -C "$scriptDir" fetch --all $(shouldDevNull)
             git -C "$scriptDir" reset --hard origin/main
             if command -v sudo &>/dev/null; then
                 sudo chmod +x "$scriptDir/$wrapperName"
