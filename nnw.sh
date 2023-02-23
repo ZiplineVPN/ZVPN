@@ -10,6 +10,11 @@ binDir="/usr/bin"
 scriptDir="/etc/$slugName"
 
 ##End Config Section. Don't edit below, unless you intend to change functionality.
+# Exit codes
+# 0: Script completed successfully.
+# 1: Error due to "uninstall" and "reinstall" flags being set at the same time.
+# 2: Error due to the script directory not existing.
+# 3: Error updating remote repository, and couldn't clone a new repository.
 
 wrapperName="nnw.sh"
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
@@ -62,7 +67,7 @@ while [[ $# -gt 0 ]]; do
         ;;
     "--reinstall")
         reinstall=1
-        ec red_bright "Uninstall flag detected, will uninstall $(c yellow "$displayName")"
+        ec red_bright "Reinstall flag detected, will reinstall $(c yellow "$displayName")"
         shift
         ;;
     *)
@@ -70,6 +75,12 @@ while [[ $# -gt 0 ]]; do
         ;;
     esac
 done
+
+#check if uninstall and reinstall are both set, if so exit, that can't happen
+if [ $uninstall -eq 1 ] && [ $reinstall -eq 1 ]; then
+    err "Error: both uninstall and reinstall flags are set, this is not allowed"
+    exit 1
+fi
 
 installWrapper() {
     if command -v sudo &>/dev/null; then
@@ -102,7 +113,7 @@ updateCheck() {
     ec cyan "Checking for updates..."
     if [ ! -d "$scriptDir" ]; then
         err "Error: directory '$scriptDir' does not exist"
-        exit 1
+        exit 2
     fi
 
     if git -C "$scriptDir" remote update &>/dev/null; then
@@ -174,7 +185,7 @@ isolateDir() {
 if [ ! "$dir" == "$binDir" ]; then
     ec cyan "Script is not in $binDir, installing wrapper..."
     installWrapper
-    exit
+    exit 0
 else
     #     sudo chown $USER:$USER "$scriptDir"
     ec cyan "Script is in $binDir, checking wrapper to see if its outdated..."
