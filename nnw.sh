@@ -139,7 +139,7 @@ else
         if [ -d "$scriptDir/includes" ]; then
             for file in "$scriptDir/includes/*.sh"; do
                 if [ -f "$file" ]; then
-                    #echo "Evaluating file $file"
+                    echo "Evaluating file $file"
                     source "$file"
                 fi
             done
