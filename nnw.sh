@@ -5,12 +5,15 @@ domain="https://git.nicknet.works"
 displayName="NNW"
 slugName=$( echo "$displayName" | awk '{print tolower($0)}')
 repo="NickNet.works/$slugName"
-wrapperName="$slugName.sh"
 installedName="$slugName"
 binDir="/usr/bin"
 scriptDir="/etc/$slugName"
 
 ##End Config Section. Don't edit below, unless you intend to change functionality.
+
+
+
+wrapperName="nnw.sh"
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 execDir="$(pwd)"
 
@@ -35,10 +38,10 @@ installWrapper()
         ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName" >/dev/null
         chmod +x "$scriptDir/$wrapperName"
     fi
-    echo "$displayName installed as '$installedName'"
-    echo "      Repo link?          $domain/$repo"
-    echo "      This $displayName's name?    $wrapperName"
+    echo "$displayName installed "
+    echo "      $scriptName as      '$installedName'"
     echo "      Where?              $binDir/$installedName"
+    echo "      Repo link?          $domain/$repo"
     echo "Ready to rollout!"
 }
 
