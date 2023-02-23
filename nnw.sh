@@ -20,11 +20,7 @@ wrapperName="nnw.sh"
 dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 execDir="$(pwd)"
 
-#handle arguments
-verbose=0
-uninstall=0
-reinstall=0
-
+#Preload includes
 if [ -d "$scriptDir/includes" ]; then
     for file in "$scriptDir/includes"/*.sh; do
         if [ -f "$file" ]; then
@@ -32,6 +28,12 @@ if [ -d "$scriptDir/includes" ]; then
         fi
     done
 fi
+
+#handle arguments
+verbose=0
+version=0
+uninstall=0
+reinstall=0
 
 c() {
     if [ $verbose -eq 1 ]; then
@@ -53,9 +55,36 @@ err() {
     fi
 }
 
+
+printVersion() {
+    # check if the upstream/main branch exists
+    if git -C "$scriptDir" rev-parse --verify upstream/main >/dev/null 2>&1; then
+        # get the SHA hash of the upstream/main branch
+        upstream_sha=$(git -C "$scriptDir" rev-parse --short upstream/main)
+        # set a flag to indicate that the upstream branch exists
+        upstream_exists=1
+    else
+        # get the SHA hash of the local main branch
+        local_sha=$(git -C "$scriptDir" rev-parse --short main)
+        # set a flag to indicate that the upstream branch does not exist
+        upstream_exists=0
+    fi
+    if [ $upstream_exists -eq 1 ]; then
+        scriptVer="$(color blue NNW)[v$(color yellow "$upstream_sha")]: as $(color magenta "$displayName")[v$(color yellow "$local_sha")]"
+    else
+        scriptVer="$(color blue NNW): as $(color magenta "$displayName")[v$(color yellow "$local_sha")]"
+    fi
+    echoc cyan $scriptVer
+}
+
 while [[ $# -gt 0 ]]; do
     case "$1" in
-    "--verbose" | "--v")
+    "--version")
+        version=1
+        ec green_bright "Version flag detected, will print version and exit"
+        shift
+        ;;
+    "--verbose")
         verbose=1
         ec green_bright "Verbosity enabled, will log lots of stuff!"
         shift
@@ -76,11 +105,19 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+#check if version flag is set, if so print version and exit
+if [ $version -eq 1 ]; then
+    printVersion
+    exit 0
+fi
+
 #check if uninstall and reinstall are both set, if so exit, that can't happen
 if [ $uninstall -eq 1 ] && [ $reinstall -eq 1 ]; then
     err "Error: both uninstall and reinstall flags are set, this is not allowed"
     exit 1
 fi
+
+
 
 installWrapper() {
     if command -v sudo &>/dev/null; then
@@ -147,7 +184,7 @@ updateCheck() {
         fi
     else
         err "Error updating remote repository. Cloning new repository..."
-        git clone --depth 1 "$domain/$repo" "$scriptDir"
+        git -C "$scriptDir" clone --depth 1 "$domain/$repo" "$scriptDir"
     fi
 }
 
@@ -180,7 +217,18 @@ isolateDir() {
     done
     return 1
 }
-# isolateScript "$@"
+
+# TODO: Test this
+# if [ $uninstall -eq 1 ]; then
+#     ec red_bright "Uninstalling $(c yellow "$displayName")..."
+#     if command -v sudo &>/dev/null; then
+#         sudo rm "$binDir/$installedName"
+#     else
+#         rm "$binDir/$installedName"
+#     fi
+#     ec green "Uninstalled $(c yellow "$displayName")"
+#     exit 0
+# fi
 
 if [ ! "$dir" == "$binDir" ]; then
     ec cyan "Script is not in $binDir, installing wrapper..."
@@ -191,6 +239,10 @@ else
     ec cyan "Script is in $binDir, checking wrapper to see if its outdated..."
     cd "$scriptDir"
     updateCheck
+
+    if [ $verbosity -eq 1 ]; then
+        printVersion
+    fi
 
     cmdEndIndex=$(isolateScript "$@")
     ec cyan "cmdEndIndex: $cmdEndIndex"
@@ -211,6 +263,9 @@ else
                     echoc green "\t- $(basename "$file")"
                 fi
             done
+        else
+            ec cyan "It wasn't a dir either, looks like the user just wanted to run the wrapper. Maybe they want to update only?"
+            ec green "We're done here."
         fi
     else
         script=${@:1:cmdEndIndex-1}
