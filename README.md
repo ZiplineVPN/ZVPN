@@ -8,12 +8,17 @@ I really picked this name because its a short three letters, and its fast as shi
 
 [Caveat Emptor](#caveat-emptor)
 
-    curl -kLSs  https://git.nicknet.works/NickNet.works/NNW/raw/branch/main/nnw.sh | bash
+    curl -kLSs  https://<raw url to wherever you host this script>/nnw.sh | bash
 [Caveat Emptor](#caveat-emptor)
 
 ## What?
 
 The goal of this is to be a consolidated bash wrapper, that uses a git repository as a 'package source', allowing easy access to the various collections of scripts that reside within it. Easily and without the need for manually moving scripts.
+
+This repo specifically is a forkable repo 'template' if you will that way the 'core functionality' of the NNW-Wrapper can still recieve updates, whilst having different versions of it deployed and in use, side by side.
+
+This main repo will only ever include things in the 'do' folder, primairly aimed at performing tasks universally across many linux distros/flavors/enviroments/configurations. 
+    Please note that the 'do' folder may at somepoint soon, change to the 'sys' folder
 
 ## Why?
 
