@@ -119,7 +119,7 @@ updateCheck() {
             shaNow=$(git -C "$scriptDir" rev-parse HEAD)
             ec cyan "Pre update SHA: $(color yellow "$shaNow")"
             ec yellow "Updating local repository..."
-            git -C "$scriptDir" fetch --all $(shouldDevNull)
+            git -C "$scriptDir" fetch --all `shouldDevNull`
             git -C "$scriptDir" reset --hard origin/main
             if command -v sudo &>/dev/null; then
                 sudo chmod +x "$scriptDir/$wrapperName"
