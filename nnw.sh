@@ -53,7 +53,8 @@ updateCheck()
     if git -C "$scriptDir" remote update; then
         if ! git -C "$scriptDir" diff --quiet origin/main; then
             echo "Remote repository has changes. Current SHA: $(git -C "$scriptDir" rev-parse HEAD) Updating local repository..."
-            git -C "$scriptDir" pull
+            git -C "$scriptDir" fetch --all
+            git -C "$scriptDir" reset --hard origin/main
             if command -v sudo &> /dev/null; then
                 sudo chmod +x "$scriptDir/$wrapperName"
                 sudo ln -sf "$scriptDir/$wrapperName" "$binDir/$installedName"
