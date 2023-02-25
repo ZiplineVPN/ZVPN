@@ -9,3 +9,18 @@ WG_PORT=$(shuf -i49152-65535 -n1)
 WG_ENDPOINT="${VPS_IP}:${WG_PORT}"
 HOME_DIR="/root"
 WG_INSTALLED=$(serverAndCertCheck)
+
+ZVPN_CACHE_FILE="/etc/zvpn/includes/zvpn-runtime.sh"
+
+# Check if the cache file exists
+if [ -f "$ZVPN_CACHE_FILE" ]; then
+  # Load the cached data from the file
+  source "$ZVPN_CACHE_FILE"
+else
+  # Generate new keys and store them in the cache file
+  echo "Generating new keys for this server..."
+  echo "Done generating keys."
+  echo "Writing keys to cache file..."
+  echo "SERVER_PRIV_KEY=\"$SERVER_PRIV_KEY\"" > "$ZVPN_CACHE_FILE"
+  echo "SERVER_PUB_KEY=\"$SERVER_PUB_KEY\"" >> "$ZVPN_CACHE_FILE"
+fi
