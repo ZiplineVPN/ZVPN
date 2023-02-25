@@ -1,4 +1,4 @@
 # NNW Post Commit Vars Builder
-# Generated @ Thu, Feb 23, 2023  7:27:45 AM
-NNW_VERSION=4f517ef
+# Generated @ Sat, Feb 25, 2023  1:51:09 PM
+NNW_VERSION=1eb8226
 
