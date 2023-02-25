@@ -93,3 +93,5 @@ serverAndCertCheck() {
         echo "false"
     fi
 }
+
+WG_INSTALLED=$(serverAndCertCheck)

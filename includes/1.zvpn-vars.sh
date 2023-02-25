@@ -7,5 +7,4 @@ WG_DNS1="8.8.8.8"
 WG_DNS2="8.8.4.4"
 WG_PORT=$(shuf -i49152-65535 -n1)
 WG_ENDPOINT="${VPS_IP}:${WG_PORT}"
-WG_INSTALLED=$(serverAndCertCheck)
 HOME_DIR="/root"
