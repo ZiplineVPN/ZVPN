@@ -6,10 +6,7 @@ if ! [[ -e /etc/wireguard/params ]]; then
     mkdir /etc/wireguard >/dev/null 2>&1
 
     chmod 600 -R /etc/wireguard/
-
-    SERVER_PRIV_KEY=$(wg genkey)
-    SERVER_PUB_KEY=$(echo "${SERVER_PRIV_KEY}" | wg pubkey)
-
+    
     # Save WireGuard settings
 
     echo "SERVER_PUB_IP=${VPS_IP}
