@@ -1,2 +1,2 @@
 #!/bin/bash
-echo $WG_INSTALLED
+echo "$WG_INSTALLED"
