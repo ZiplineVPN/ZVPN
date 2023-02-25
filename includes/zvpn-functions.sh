@@ -29,20 +29,20 @@ makeClient() {
 	PublicKey = ${SERVER_PUB_KEY}
 	PresharedKey = ${CLIENT_PRE_SHARED_KEY}
 	Endpoint = ${ENDPOINT}
-	AllowedIPs = 0.0.0.0/0,::/0" >>"${HOME_DIR}/${SERVER_WG_NIC}-client-${CLIENT_NAME}.conf"
+	AllowedIPs = 0.0.0.0/0,::/0" >>"${HOME_DIR}/${WG_NIC}-client-${CLIENT_NAME}.conf"
 
     # Add the client as a peer to the server
     echo -e "\n### Client ${CLIENT_NAME}
 	[Peer]
 	PublicKey = ${CLIENT_PUB_KEY}
 	PresharedKey = ${CLIENT_PRE_SHARED_KEY}
-	AllowedIPs = ${CLIENT_WG_IPV4}/32,${CLIENT_WG_IPV6}/128" >>"/etc/wireguard/${SERVER_WG_NIC}.conf"
+	AllowedIPs = ${CLIENT_WG_IPV4}/32,${CLIENT_WG_IPV6}/128" >>"/etc/wireguard/${WG_NIC}.conf"
 
-    wg syncconf "${SERVER_WG_NIC}" <(wg-quick strip "${SERVER_WG_NIC}")
+    wg syncconf "${WG_NIC}" <(wg-quick strip "${WG_NIC}")
 
-    qrencode -t ansiutf8 -l L <"${HOME_DIR}/${SERVER_WG_NIC}-client-${CLIENT_NAME}.conf"
+    qrencode -t ansiutf8 -l L <"${HOME_DIR}/${WG_NIC}-client-${CLIENT_NAME}.conf"
 
-    echo "${HOME_DIR}/${SERVER_WG_NIC}-client-${CLIENT_NAME}.conf"
+    echo "${HOME_DIR}/${WG_NIC}-client-${CLIENT_NAME}.conf"
     #Now finally write that the .conf file has been created
     #That way if something goes wrong or fails and exits before this point, the script will try again
     #re-using the same IP address the next time it tries to make a client.
@@ -50,7 +50,7 @@ makeClient() {
 }
 
 checkClientExists() {
-    DOT_EXISTS=$(grep -c "${SERVER_WG_IPV4::-1}${1}" "/etc/wireguard/${SERVER_WG_NIC}.conf")
+    DOT_EXISTS=$(grep -c "${SERVER_WG_IPV4::-1}${1}" "/etc/wireguard/${WG_NIC}.conf")
     if [[ ${DOT_EXISTS} == '0' ]]; then
         exit 0
     fi
