@@ -27,7 +27,7 @@ function newClient() {
 	[Peer]
 	PublicKey = ${SERVER_PUB_KEY}
 	PresharedKey = ${CLIENT_PRE_SHARED_KEY}
-	Endpoint = ${ENDPOINT}
+	Endpoint = ${WG_ENDPOINT}
 	AllowedIPs = 0.0.0.0/0,::/0" >>"${HOME_DIR}/${WG_NIC}-client-${CLIENT_NAME}.conf"
 
 	# Add the client as a peer to the server
