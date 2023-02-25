@@ -1,5 +1,4 @@
 makeClient() {
-
     DOT_IP="$1"
     checkClientExists "$DOT_IP"
     if [[ $? -ne 0 ]]; then
@@ -47,7 +46,6 @@ makeClient() {
     #Now finally write that the .conf file has been created
     #That way if something goes wrong or fails and exits before this point, the script will try again
     #re-using the same IP address the next time it tries to make a client.
-    echo "$DOT_IP" >"$CACHE_FILE"
     exit 0
 }
 
