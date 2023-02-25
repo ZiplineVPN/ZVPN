@@ -146,9 +146,11 @@ updateCheck() {
             ec cyan "Pre update SHA: $(color yellow "$shaNow")"
             ec yellow "Updating local repository..."
             if [ $verbose -eq 1 ]; then
+                git -C "$scriptDir" reset --hard origin/main
                 git -C "$scriptDir" fetch --all
             else
                 git -C "$scriptDir" fetch --all &>/dev/null
+                git -C "$scriptDir" reset --hard origin/main &>/dev/null
             fi
             if command -v sudo &>/dev/null; then
                 sudo chmod +x "$scriptDir/$wrapperName"
@@ -254,11 +256,6 @@ else
     fi
     if [ -f "$script" ]; then
         ec green "Running $script"
-        if [ $verbose -eq 1 ]; then
-            git -C "$scriptDir" reset --hard origin/main
-        else
-            git -C "$scriptDir" reset --hard origin/main &>/dev/null
-        fi
         chmod +x "$script"
         args=""
         for a in "${@:cmdEndIndex}"; do
