@@ -1,15 +1,15 @@
 makeClient() {
 	for DOT_IP in {2..254}; do
-		DOT_EXISTS=$(grep -c "${SERVER_WG_IPV4::-1}${DOT_IP}" "/etc/wireguard/${SERVER_WG_NIC}.conf")
+		DOT_EXISTS=$(grep -c "${WG_IPV4::-1}${DOT_IP}" "/etc/wireguard/${SERVER_WG_NIC}.conf")
 		if [[ ${DOT_EXISTS} == '0' ]]; then
 			break
 		fi
 	done
 	CLIENT_NAME="$1"
 
-    BASE_IP=$(echo "$SERVER_WG_IPV4" | awk -F '.' '{ print $1"."$2"."$3 }')
+    BASE_IP=$(echo "$WG_IPV4" | awk -F '.' '{ print $1"."$2"."$3 }')
     CLIENT_WG_IPV4="${BASE_IP}.${DOT_IP}"
-    BASE_IP=$(echo "$SERVER_WG_IPV6" | awk -F '::' '{ print $1 }')
+    BASE_IP=$(echo "$WG_IPV6" | awk -F '::' '{ print $1 }')
     CLIENT_WG_IPV6="${BASE_IP}::${DOT_IP}"
 
     CLIENT_PRIV_KEY=$(wg genkey)
@@ -19,12 +19,12 @@ makeClient() {
     echo "[Interface]
 	PrivateKey = ${CLIENT_PRIV_KEY}
 	Address = ${CLIENT_WG_IPV4}/32,${CLIENT_WG_IPV6}/128
-	DNS = ${CLIENT_DNS_1},${CLIENT_DNS_2}
+	DNS = ${WG_DNS1},${WG_DNS2}
 
 	[Peer]
 	PublicKey = ${SERVER_PUB_KEY}
 	PresharedKey = ${CLIENT_PRE_SHARED_KEY}
-	Endpoint = ${ENDPOINT}
+	Endpoint = ${WG_ENDPOINT}
 	AllowedIPs = 0.0.0.0/0,::/0" >>"${HOME_DIR}/${WG_NIC}-client-${CLIENT_NAME}.conf"
 
     # Add the client as a peer to the server
