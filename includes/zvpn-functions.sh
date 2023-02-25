@@ -45,35 +45,6 @@ makeClient() {
     exit 0
 }
 
-makeMassClients() {
-
-    if [[ -z $1 ]]; then
-        echo "You must specify the number of clients to make"
-        exit 1
-    fi
-
-    NUMBER_OF_CLIENTS=$1
-    clients_made=0
-
-    for DOT_IP in {2..254}; do
-        makeClient "$DOT_IP"
-        if [[ $? -eq 0 ]]; then
-            clients_made=$((clients_made + 1))
-            echo "Client $clients_made made at $DOT_IP"
-        fi
-
-        if [[ $clients_made -eq $NUMBER_OF_CLIENTS ]]; then
-            echo "All clients made!"
-            exit 0
-        fi
-
-        if [[ $DOT_IP -eq 254 ]]; then
-            echo "Reached the end of address space."
-            exit 2
-        fi
-    done
-}
-
 serverAndCertCheck() {
     if [[ -e /etc/wireguard/params && -e /root/wg0-client-default.conf ]]; then
         echo "true"

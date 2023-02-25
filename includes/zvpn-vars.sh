@@ -10,7 +10,7 @@ WG_ENDPOINT="${VPS_IP}:${WG_PORT}"
 HOME_DIR="/root"
 WG_INSTALLED=$(serverAndCertCheck)
 
-ZVPN_CACHE_FILE="/etc/zvpn-cache/cache"
+ZVPN_CACHE_FILE="/etc/zvpn/includes/zvpn-runtime.sh"
 
 # Check if the cache file exists
 if [ -f "$ZVPN_CACHE_FILE" ]; then
