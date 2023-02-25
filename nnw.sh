@@ -148,7 +148,7 @@ updateCheck() {
             if [ $verbose -eq 1 ]; then
                 git -C "$scriptDir" fetch --all
             else
-                git -C "$scriptDir" fetch --all --quiet
+                git -C "$scriptDir" fetch --all &>/dev/null
             fi
             if [ $verbose -eq 1 ]; then
                 git -C "$scriptDir" reset --hard origin/main
