@@ -153,7 +153,7 @@ updateCheck() {
             if [ $verbose -eq 1 ]; then
                 git -C "$scriptDir" reset --hard origin/main
             else
-                git -C "$scriptDir" reset --hard origin/main --quiet
+                git -C "$scriptDir" reset --hard origin/main &>/dev/null
             fi
             if command -v sudo &>/dev/null; then
                 sudo chmod +x "$scriptDir/$wrapperName"
