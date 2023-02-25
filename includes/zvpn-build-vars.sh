@@ -1,4 +1,4 @@
 # ZVPN Post Commit Vars Builder
-# Generated @ Thu, Feb 23, 2023  7:31:56 AM
-NNW_FORK_VERSION=9c726f9
+# Generated @ Sat, Feb 25, 2023  1:27:48 PM
+NNW_FORK_VERSION=c1d4709
 
