@@ -1,15 +1,11 @@
 makeClient() {
-    DOT_IP="$1"
-    checkClientExists "$DOT_IP"
-    if [[ $? -ne 0 ]]; then
-        exit 1
-    fi
-
-    if [[ -n "$2" ]]; then
-        CLIENT_NAME="$2"
-    else
-        CLIENT_NAME="client-$DOT_IP"
-    fi
+	for DOT_IP in {2..254}; do
+		DOT_EXISTS=$(grep -c "${SERVER_WG_IPV4::-1}${DOT_IP}" "/etc/wireguard/${SERVER_WG_NIC}.conf")
+		if [[ ${DOT_EXISTS} == '0' ]]; then
+			break
+		fi
+	done
+	CLIENT_NAME="$1"
 
     BASE_IP=$(echo "$SERVER_WG_IPV4" | awk -F '.' '{ print $1"."$2"."$3 }')
     CLIENT_WG_IPV4="${BASE_IP}.${DOT_IP}"
@@ -47,14 +43,6 @@ makeClient() {
     #That way if something goes wrong or fails and exits before this point, the script will try again
     #re-using the same IP address the next time it tries to make a client.
     exit 0
-}
-
-checkClientExists() {
-    DOT_EXISTS=$(grep -c "${SERVER_WG_IPV4::-1}${1}" "/etc/wireguard/${WG_NIC}.conf")
-    if [[ ${DOT_EXISTS} == '0' ]]; then
-        exit 0
-    fi
-    exit 1
 }
 
 makeMassClients() {
