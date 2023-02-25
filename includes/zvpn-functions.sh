@@ -6,7 +6,12 @@ makeClient() {
         exit 1
     fi
 
-    CLIENT_NAME="client-$DOT_IP"
+    if [[ -n "$2" ]]; then
+        CLIENT_NAME="$2"
+    else
+        CLIENT_NAME="client-$DOT_IP"
+    fi
+
     BASE_IP=$(echo "$SERVER_WG_IPV4" | awk -F '.' '{ print $1"."$2"."$3 }')
     CLIENT_WG_IPV4="${BASE_IP}.${DOT_IP}"
     BASE_IP=$(echo "$SERVER_WG_IPV6" | awk -F '::' '{ print $1 }')
