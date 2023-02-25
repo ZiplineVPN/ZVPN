@@ -1,11 +1,27 @@
 makeClient() {
-	for DOT_IP in {2..254}; do
-		DOT_EXISTS=$(grep -c "${WG_IPV4::-1}${DOT_IP}" "/etc/wireguard/${SERVER_WG_NIC}.conf")
-		if [[ ${DOT_EXISTS} == '0' ]]; then
-			break
-		fi
-	done
-	CLIENT_NAME="$1"
+    for DOT_IP in {2..254}; do
+        DOT_EXISTS=$(grep -c "${WG_IPV4::-1}${DOT_IP}" "/etc/wireguard/${SERVER_WG_NIC}.conf")
+        if [[ ${DOT_EXISTS} == '0' ]]; then
+            break
+        fi
+    done
+    CLIENT_NAME="$1"
+    ZVPN_CACHE_FILE="/etc/zvpn/includes/zvpn-runtime.sh"
+
+    # Check if the cache file exists
+    if [ -f "$ZVPN_CACHE_FILE" ]; then
+        # Load the cached data from the file
+        source "$ZVPN_CACHE_FILE"
+    else
+        # Generate new keys and store them in the cache file
+        echo "Generating new keys for this server..."
+        SERVER_PRIV_KEY=$(wg genkey)
+        SERVER_PUB_KEY=$(echo "${SERVER_PRIV_KEY}" | wg pubkey)
+        echo "Done generating keys."
+        echo "Writing keys to cache file..."
+        echo "SERVER_PRIV_KEY=\"$SERVER_PRIV_KEY\"" >"$ZVPN_CACHE_FILE"
+        echo "SERVER_PUB_KEY=\"$SERVER_PUB_KEY\"" >>"$ZVPN_CACHE_FILE"
+    fi
 
     BASE_IP=$(echo "$WG_IPV4" | awk -F '.' '{ print $1"."$2"."$3 }')
     CLIENT_WG_IPV4="${BASE_IP}.${DOT_IP}"

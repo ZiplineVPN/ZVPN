@@ -6,7 +6,25 @@ if ! [[ -e /etc/wireguard/params ]]; then
     mkdir /etc/wireguard >/dev/null 2>&1
 
     chmod 600 -R /etc/wireguard/
-    
+
+
+    ZVPN_CACHE_FILE="/etc/zvpn/includes/zvpn-runtime.sh"
+
+    # Check if the cache file exists
+    if [ -f "$ZVPN_CACHE_FILE" ]; then
+    # Load the cached data from the file
+    source "$ZVPN_CACHE_FILE"
+    else
+    # Generate new keys and store them in the cache file
+    echo "Generating new keys for this server..."
+    SERVER_PRIV_KEY=$(wg genkey)
+    SERVER_PUB_KEY=$(echo "${SERVER_PRIV_KEY}" | wg pubkey)
+    echo "Done generating keys."
+    echo "Writing keys to cache file..."
+    echo "SERVER_PRIV_KEY=\"$SERVER_PRIV_KEY\"" > "$ZVPN_CACHE_FILE"
+    echo "SERVER_PUB_KEY=\"$SERVER_PUB_KEY\"" >> "$ZVPN_CACHE_FILE"
+    fi
+
     # Save WireGuard settings
 
     echo "SERVER_PUB_IP=${VPS_IP}
