@@ -24,6 +24,5 @@ for manager in "${!pkg_managers[@]}"; do
   if (command -v "$manager" > /dev/null 2>&1) || false; then
     echo "Updating packages using $manager..."
     eval "${pkg_managers[$manager]}"
-    break
   fi
 done
