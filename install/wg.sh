@@ -14,9 +14,37 @@ function newClient() {
 	BASE_IP=$(echo "$WG_IPV6" | awk -F '::' '{ print $1 }')
 	CLIENT_WG_IPV6="${BASE_IP}::${DOT_IP}"
 	
-	CLIENT_PRIV_KEY=$(wg genkey)
-	CLIENT_PUB_KEY=$(echo "${CLIENT_PRIV_KEY}" | wg pubkey)
-	CLIENT_PRE_SHARED_KEY=$(wg genpsk)
+	# Add retry mechanism with exponential backoff
+	MAX_RETRIES=5
+	retry_count=0
+	backoff_time=1
+	
+	while [ $retry_count -lt $MAX_RETRIES ]; do
+		# Check if we can generate keys and all variables are populated
+		if CLIENT_PRIV_KEY=$(wg genkey); then
+			CLIENT_PUB_KEY=$(echo "${CLIENT_PRIV_KEY}" | wg pubkey)
+			CLIENT_PRE_SHARED_KEY=$(wg genpsk)
+			
+			# Verify all required variables are available
+			if [[ -n "${CLIENT_PRIV_KEY}" && -n "${CLIENT_WG_IPV4}" && -n "${CLIENT_WG_IPV6}" && 
+				  -n "${WG_DNS1}" && -n "${SERVER_PUB_KEY}" && -n "${CLIENT_PRE_SHARED_KEY}" && 
+				  -n "${WG_ENDPOINT}" ]]; then
+				break
+			fi
+		fi
+		
+		# If we get here, something is missing - retry with backoff
+		echo "Missing required configuration values, retrying in ${backoff_time} seconds..."
+		sleep $backoff_time
+		backoff_time=$((backoff_time * 2))
+		retry_count=$((retry_count + 1))
+	done
+	
+	# Check if we exceeded max retries
+	if [ $retry_count -ge $MAX_RETRIES ]; then
+		echo "Failed to generate client configuration after ${MAX_RETRIES} attempts."
+		return 1
+	fi
 
 	# Create client file and add the server as a peer
 	echo "[Interface]
@@ -28,7 +56,8 @@ function newClient() {
 	PublicKey = ${SERVER_PUB_KEY}
 	PresharedKey = ${CLIENT_PRE_SHARED_KEY}
 	Endpoint = ${WG_ENDPOINT}
-	AllowedIPs = 0.0.0.0/0,::/0" >>"${HOME_DIR}/${WG_NIC}-client-${CLIENT_NAME}.conf"
+	AllowedIPs = 0.0.0.0/0,::/0
+	PersistentKeepalive = 25" >>"${HOME_DIR}/${WG_NIC}-client-${CLIENT_NAME}.conf"
 
 	# Add the client as a peer to the server
 	echo -e "\n### Client ${CLIENT_NAME}
