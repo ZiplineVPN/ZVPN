@@ -250,7 +250,9 @@ updateCheck() {
         fi
     else
         log_warning "Error updating remote repository, cloning new repository"
-        git -C "$scriptDir" clone --depth 1 "$domain/$repo" "$scriptDir"
+        # Remove existing directory before cloning
+        rm -rf "$scriptDir"
+        git clone --depth 1 "$domain/$repo" "$scriptDir"
     fi
 }
 
